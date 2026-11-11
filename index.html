@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OneWorld Toastmasters Club</title>
+  <meta name="description" content="OneWorld Toastmasters Club, Kuala Lumpur: next meeting, timed agenda, role players, meeting preparation, executive committee and how to visit as a guest." />
+  <link rel="icon" type="image/png" href="assets/tm-logo.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- Brand manual free alternates: Montserrat (headings, for Gotham) and Source Sans 3 (body, for Myriad Pro) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { heading: ['Montserrat', 'sans-serif'], sans: ['"Source Sans 3"', 'Arial', 'sans-serif'] },
+          colors: {
+            tmMaroon: { DEFAULT: '#772432', dark: '#581722', light: '#913344' },
+            tmNavy: { DEFAULT: '#004165', dark: '#002B44', light: '#0A5682' },
+            tmGold: { DEFAULT: '#F2DF74', dark: '#C8A944' },
+            tmGray: { DEFAULT: '#A9B2B1', light: '#F4F6F7', dark: '#2E353B' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .hero-bg {
+      background-color: #002B44;
+      background-image: linear-gradient(100deg, rgba(0,43,68,.96) 0%, rgba(0,65,101,.90) 48%, rgba(0,65,101,.55) 100%), url('assets/hero-mic.jpg');
+      background-size: cover; background-position: center;
+    }
+    .visit-bg {
+      background-color: #772432;
+      background-image: linear-gradient(90deg, rgba(88,23,34,.95) 0%, rgba(119,36,50,.88) 60%, rgba(119,36,50,.75) 100%), url('assets/audience.jpg');
+      background-size: cover; background-position: center;
+    }
+    section[id] { scroll-margin-top: 4.5rem; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f5f9; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #004165; border-radius: 4px; }
+    .now-row { box-shadow: inset 4px 0 0 #772432; background: #FDF6D8 !important; }
+    .eyebrow { font-family: Montserrat, sans-serif; font-weight: 800; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: #772432; }
+    .nav-link.active { color: #772432; }
+  </style>
+</head>
+<body class="bg-white text-slate-800 font-sans antialiased selection:bg-tmGold selection:text-tmNavy-dark">
+
+  <!-- ORGANIZER BANNER (only after unlocking) -->
+  <div id="adminModeBanner" class="hidden bg-amber-400 text-slate-950 px-4 py-2.5 text-xs border-b border-amber-500">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-start gap-2 max-w-2xl">
+        <span class="px-2 py-0.5 bg-black text-amber-300 font-black rounded uppercase text-[10px] mt-0.5 flex-shrink-0">Organizer</span>
+        <span class="font-semibold">Edits are a <b>draft in this browser</b><span id="draftState"></span>. To publish for everyone: <b>Download data.json</b>, then upload it to the GitHub repo, replacing the old file.</span>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <button onclick="openMeetingModal()" class="px-2.5 py-1.5 bg-tmNavy text-white rounded-lg hover:bg-tmNavy-dark text-xs font-bold flex items-center gap-1"><i class="fas fa-calendar-alt text-tmGold"></i> Meeting Details</button>
+        <button onclick="exportDataJson()" class="px-2.5 py-1.5 bg-slate-900 text-white rounded-lg hover:bg-slate-800 text-xs font-bold flex items-center gap-1"><i class="fas fa-download text-tmGold"></i> Download data.json</button>
+        <a href="https://github.com/marulmani/oneworld-tmc-agenda/upload/main" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 bg-slate-900 text-white rounded-lg hover:bg-slate-800 text-xs font-bold flex items-center gap-1"><i class="fab fa-github text-tmGold"></i> Upload to GitHub</a>
+        <label class="px-2.5 py-1.5 bg-white text-slate-900 border border-slate-900/20 rounded-lg hover:bg-slate-50 text-xs font-bold flex items-center gap-1 cursor-pointer"><i class="fas fa-file-import"></i> Import JSON<input type="file" accept="application/json,.json" class="hidden" onchange="importDataJson(this)" /></label>
+        <button onclick="discardDraft()" class="px-2.5 py-1.5 bg-rose-700 text-white rounded-lg hover:bg-rose-800 text-xs font-bold flex items-center gap-1"><i class="fas fa-undo"></i> Discard Draft</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[68px] flex items-center justify-between gap-3">
+      <a href="#home" class="flex items-center gap-2.5 min-w-0">
+        <img src="assets/tm-logo.png" alt="Toastmasters International logo" width="56" height="46" class="w-[50px] sm:w-[56px] h-auto flex-shrink-0" />
+        <div class="min-w-0 leading-tight">
+          <div class="font-heading font-extrabold text-[13px] sm:text-base text-tmNavy tracking-tight">ONEWORLD <span class="text-tmMaroon">TOASTMASTERS</span></div>
+          <div class="text-[10px] sm:text-[11px] text-slate-500 truncate">Club 01589773 • Area W4 • District 51</div>
+        </div>
+      </a>
+      <nav id="desktopNav" class="hidden xl:flex items-center gap-6 text-[13px] font-heading font-semibold text-slate-600">
+        <a href="#about" class="nav-link hover:text-tmMaroon">About</a>
+        <a href="#meeting" class="nav-link hover:text-tmMaroon">Next Meeting</a>
+        <a href="#agenda" class="nav-link hover:text-tmMaroon">Agenda</a>
+        <a href="#lineup" class="nav-link hover:text-tmMaroon">Line-up</a>
+        <a href="#prep" class="nav-link hover:text-tmMaroon">Meeting Prep</a>
+        <a href="#exco" class="nav-link hover:text-tmMaroon">Exco</a>
+        <a href="#visit" class="nav-link hover:text-tmMaroon">Visit Us</a>
+      </nav>
+      <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+        <button id="adminToggleBtn" onclick="toggleAdminMode()" class="hidden items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border border-amber-400 text-amber-700 bg-amber-50 hover:bg-amber-100" title="Organizer edit mode">
+          <i class="fas fa-lock"></i><span id="adminToggleText" class="hidden sm:inline">Organizer</span>
+        </button>
+        <a id="headerZoomBtn" href="#" target="_blank" rel="noopener noreferrer" class="bg-tmMaroon hover:bg-tmMaroon-dark text-white font-heading font-bold text-xs sm:text-sm px-3 sm:px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+          <i class="fas fa-video text-tmGold"></i><span>Join Zoom</span>
+        </a>
+        <button id="mobileMenuBtn" aria-label="Toggle menu" aria-expanded="false" class="xl:hidden text-slate-700 hover:text-tmNavy p-2 text-xl"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+    <div id="mobileMenu" class="hidden xl:hidden bg-white border-t border-slate-200 px-6 py-4 shadow-lg grid grid-cols-2 gap-x-6 gap-y-3 text-sm font-semibold text-slate-700">
+      <a href="#about" class="hover:text-tmMaroon">About</a>
+      <a href="#meeting" class="hover:text-tmMaroon">Next Meeting</a>
+      <a href="#agenda" class="hover:text-tmMaroon">Agenda</a>
+      <a href="#lineup" class="hover:text-tmMaroon">Line-up</a>
+      <a href="#prep" class="hover:text-tmMaroon">Meeting Prep</a>
+      <a href="#exco" class="hover:text-tmMaroon">Exco</a>
+      <a href="#timer" class="hover:text-tmMaroon">Timer Rules</a>
+      <a href="#visit" class="hover:text-tmMaroon">Visit Us</a>
+      <button onclick="copyShareLink()" class="col-span-2 mt-1 text-center border border-slate-300 py-2.5 rounded-lg font-bold text-tmNavy"><i class="fas fa-share-alt mr-1"></i> Share this page</button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="home" class="hero-bg text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-24 lg:pt-20 lg:pb-32 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+      <div class="lg:col-span-7 space-y-5">
+        <div class="text-[11px] sm:text-xs font-heading font-bold tracking-[.18em] uppercase text-tmGold">Kuala Lumpur • District 51 • Since 2011</div>
+        <h1 class="font-heading font-extrabold text-4xl sm:text-5xl lg:text-6xl tracking-tight leading-[1.05]">OneWorld<br />Toastmasters Club</h1>
+        <p class="font-heading font-semibold text-lg sm:text-xl text-tmGold">Where Leaders Are Made</p>
+        <p class="text-base sm:text-lg text-slate-200 max-w-xl leading-relaxed">A friendly, supportive club where members practise public speaking and leadership every month. Meet in person in Kuala Lumpur or join us on Zoom.</p>
+        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+          <a href="#meeting" class="px-6 py-3.5 bg-tmGold hover:bg-tmGold-dark text-tmNavy-dark font-heading font-extrabold text-sm rounded-xl text-center transition"><i class="fas fa-calendar-check mr-1.5"></i> Next Meeting</a>
+          <a href="#visit" class="px-6 py-3.5 bg-white/10 hover:bg-white/20 border border-white/30 font-heading font-bold text-sm rounded-xl text-center transition"><i class="fas fa-hand-sparkles mr-1.5 text-tmGold"></i> Visit as a Guest</a>
+        </div>
+      </div>
+
+      <!-- Next meeting card -->
+      <div class="lg:col-span-5">
+        <div class="bg-white text-slate-800 rounded-3xl shadow-2xl overflow-hidden">
+          <div class="bg-tmMaroon text-white px-6 py-3 flex items-center justify-between">
+            <span class="font-heading font-bold text-sm"><i class="fas fa-microphone-alt text-tmGold mr-1.5"></i> Meeting #<span id="heroMeetingNo"></span></span>
+            <span id="heroFormat" class="text-[11px] font-bold uppercase tracking-wider bg-white/15 px-2 py-0.5 rounded"></span>
+          </div>
+          <div class="p-6 space-y-4">
+            <div>
+              <div id="heroDate" class="font-heading font-extrabold text-xl text-tmNavy"></div>
+              <div id="heroTime" class="text-sm text-slate-600"></div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="rounded-xl bg-tmGray-light p-3">
+                <div class="eyebrow !text-[10px]">Theme</div>
+                <div id="heroTheme" class="font-heading font-bold text-sm text-slate-900 mt-0.5"></div>
+              </div>
+              <div class="rounded-xl bg-tmGray-light p-3">
+                <div class="eyebrow !text-[10px]">Word of the Day</div>
+                <div class="font-heading font-bold text-sm text-slate-900 mt-0.5"><span id="heroWod"></span> <span id="heroWodSay" class="font-sans font-normal text-xs text-slate-500"></span></div>
+              </div>
+            </div>
+            <div>
+              <div id="countdownHeading" class="text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1.5">Starts in</div>
+              <div class="grid grid-cols-4 gap-2 text-center">
+                <div class="rounded-xl bg-tmNavy text-white py-2"><span id="cdDays" class="block font-heading font-extrabold text-xl">00</span><span class="text-[9px] uppercase text-slate-300">Days</span></div>
+                <div class="rounded-xl bg-tmNavy text-white py-2"><span id="cdHours" class="block font-heading font-extrabold text-xl">00</span><span class="text-[9px] uppercase text-slate-300">Hours</span></div>
+                <div class="rounded-xl bg-tmNavy text-white py-2"><span id="cdMins" class="block font-heading font-extrabold text-xl">00</span><span class="text-[9px] uppercase text-slate-300">Mins</span></div>
+                <div class="rounded-xl bg-tmNavy text-white py-2"><span id="cdSecs" class="block font-heading font-extrabold text-xl text-tmGold">00</span><span class="text-[9px] uppercase text-slate-300">Secs</span></div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <a id="heroZoomBtn" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-3 bg-tmMaroon hover:bg-tmMaroon-dark text-white font-heading font-bold text-sm rounded-xl text-center transition"><i class="fas fa-video mr-1"></i> Join Zoom</a>
+              <a href="#agenda" class="px-4 py-3 bg-tmNavy hover:bg-tmNavy-dark text-white font-heading font-bold text-sm rounded-xl text-center transition"><i class="fas fa-list-ol mr-1"></i> Agenda</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS STRIP -->
+  <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12">
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-200 grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-slate-200">
+      <div class="p-5 text-center"><div class="font-heading font-extrabold text-2xl sm:text-3xl text-tmNavy">2011</div><div class="text-xs text-slate-500 mt-0.5">Chartered</div></div>
+      <div class="p-5 text-center"><div class="font-heading font-extrabold text-2xl sm:text-3xl text-tmMaroon"><span id="statMeetings"></span></div><div class="text-xs text-slate-500 mt-0.5">Meetings held</div></div>
+      <div class="p-5 text-center"><div class="font-heading font-extrabold text-2xl sm:text-3xl text-tmNavy">2 / month</div><div class="text-xs text-slate-500 mt-0.5">2nd &amp; 4th Thursday</div></div>
+      <div class="p-5 text-center"><div class="font-heading font-extrabold text-2xl sm:text-3xl text-tmMaroon">Hybrid</div><div class="text-xs text-slate-500 mt-0.5">In person + Zoom</div></div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section id="about" class="py-20 sm:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div class="relative">
+        <img src="assets/photo-contest.jpg" alt="Speaker at a lectern during a Toastmasters meeting" class="w-full h-72 sm:h-96 object-cover rounded-3xl shadow-lg" loading="lazy" />
+        <div class="absolute -bottom-6 right-4 sm:right-8 bg-tmNavy text-white rounded-2xl px-5 py-4 shadow-xl max-w-[16rem]">
+          <div class="text-[10px] font-heading font-bold uppercase tracking-widest text-tmGold">Our mission</div>
+          <div class="text-sm leading-snug mt-1">A supportive, positive place to build communication and leadership skills.</div>
+        </div>
+      </div>
+      <div class="space-y-6">
+        <div>
+          <div class="eyebrow">About the club</div>
+          <h2 class="font-heading font-extrabold text-3xl sm:text-4xl text-slate-900 mt-2">Practise speaking. Grow as a leader.</h2>
+        </div>
+        <p class="text-slate-600 leading-relaxed">OneWorld Toastmasters Club is part of <a href="https://www.toastmasters.org" target="_blank" rel="noopener noreferrer" class="text-tmNavy font-semibold underline decoration-tmGold underline-offset-2">Toastmasters International</a>. Members work through the Pathways learning programme at their own pace, giving prepared speeches, speaking off the cuff and taking on meeting roles that build leadership.</p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="p-4 rounded-2xl border border-slate-200">
+            <i class="fas fa-microphone-alt text-tmMaroon text-lg"></i>
+            <div class="font-heading font-bold text-sm text-slate-900 mt-2">Prepared speeches</div>
+            <p class="text-xs text-slate-600 mt-1">Pathways projects, 4–7 minutes each.</p>
+          </div>
+          <div class="p-4 rounded-2xl border border-slate-200">
+            <i class="fas fa-bolt text-tmNavy text-lg"></i>
+            <div class="font-heading font-bold text-sm text-slate-900 mt-2">Table Topics</div>
+            <p class="text-xs text-slate-600 mt-1">Impromptu answers in 1–2 minutes.</p>
+          </div>
+          <div class="p-4 rounded-2xl border border-slate-200">
+            <i class="fas fa-clipboard-check text-tmMaroon text-lg"></i>
+            <div class="font-heading font-bold text-sm text-slate-900 mt-2">Evaluations</div>
+            <p class="text-xs text-slate-600 mt-1">Kind, specific feedback for every speaker.</p>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600">
+          <span><i class="far fa-calendar text-tmMaroon mr-1.5"></i><span id="aboutSchedule"></span></span>
+          <span><i class="fas fa-map-marker-alt text-tmMaroon mr-1.5"></i>Plaza Usahawan, Kuala Lumpur</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEXT MEETING -->
+  <section id="meeting" class="py-20 sm:py-24 bg-tmGray-light border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-3xl mb-10">
+        <div class="eyebrow">Next meeting</div>
+        <h2 class="font-heading font-extrabold text-3xl sm:text-4xl text-slate-900 mt-2">Meeting #<span id="mtNo"></span>: <span id="mtTheme" class="text-tmMaroon"></span></h2>
+        <p id="mtDesc" class="text-slate-600 mt-3 leading-relaxed"></p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-10">
+        <div class="bg-white rounded-2xl border border-slate-200 p-5 space-y-3">
+          <div class="flex items-start gap-3"><span class="w-10 h-10 rounded-xl bg-tmNavy/10 text-tmNavy flex items-center justify-center"><i class="far fa-calendar-alt"></i></span>
+            <div><div class="text-xs text-slate-500">Date &amp; time</div><div id="mtDate" class="font-heading font-bold text-slate-900"></div><div id="mtTime" class="text-sm text-slate-600"></div></div></div>
+          <div class="flex items-start gap-3"><span class="w-10 h-10 rounded-xl bg-tmMaroon/10 text-tmMaroon flex items-center justify-center"><i class="fas fa-map-marker-alt"></i></span>
+            <div class="min-w-0"><div class="text-xs text-slate-500">Venue</div><div id="mtVenue" class="font-semibold text-slate-900 text-sm"></div><a id="mtMap" href="#" target="_blank" rel="noopener noreferrer" class="text-xs font-bold text-tmNavy hover:underline">Open in Google Maps <i class="fas fa-external-link-alt text-[9px]"></i></a></div></div>
+          <button onclick="downloadICS()" class="w-full py-2.5 rounded-xl border border-tmNavy text-tmNavy font-heading font-bold text-sm hover:bg-tmNavy hover:text-white transition"><i class="far fa-calendar-plus mr-1"></i> Add to Calendar</button>
+        </div>
+        <div class="bg-tmNavy text-white rounded-2xl p-5 space-y-3">
+          <div class="flex items-center gap-2 font-heading font-bold"><i class="fas fa-video text-tmGold"></i> Join on Zoom</div>
+          <div class="grid grid-cols-2 gap-2 text-sm">
+            <div class="bg-white/10 rounded-xl p-3"><div class="text-[10px] uppercase tracking-wider text-slate-300">Meeting ID</div><div id="zoomIdText" class="font-heading font-bold mt-0.5"></div></div>
+            <div class="bg-white/10 rounded-xl p-3"><div class="text-[10px] uppercase tracking-wider text-slate-300">Passcode</div><div id="zoomPassText" class="font-heading font-bold mt-0.5"></div></div>
+          </div>
+          <a id="mtZoomBtn" href="#" target="_blank" rel="noopener noreferrer" class="block w-full py-3 rounded-xl bg-tmGold hover:bg-tmGold-dark text-tmNavy-dark text-center font-heading font-extrabold text-sm transition"><i class="fas fa-sign-in-alt mr-1"></i> Open Zoom</a>
+        </div>
+        <div class="bg-white rounded-2xl border border-slate-200 p-5">
+          <div class="eyebrow !text-[10px]">Word of the Day</div>
+          <div class="font-heading font-extrabold text-3xl text-tmNavy mt-1"><span id="mtWod"></span></div>
+          <div id="mtWodSay" class="text-sm text-slate-500"></div>
+          <p id="mtWodMeaning" class="text-sm text-slate-700 mt-2"></p>
+          <p class="text-xs text-slate-500 mt-3 pt-3 border-t border-slate-100">Use it in your speeches tonight. The Grammarian is counting!</p>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between gap-3 mb-4">
+        <h3 class="font-heading font-bold text-lg text-slate-900">Links &amp; materials</h3>
+        <button id="adminLinkControls" onclick="openLinkModal(null)" class="hidden px-3 py-2 bg-amber-400 text-slate-950 rounded-lg text-xs font-bold"><i class="fas fa-plus mr-1"></i> Add Link</button>
+      </div>
+      <div id="linksContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
+    </div>
+  </section>
+
+  <!-- AGENDA -->
+  <section id="agenda" class="py-20 sm:py-24">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+        <div>
+          <div id="agendaTag" class="eyebrow">Program agenda</div>
+          <h2 class="font-heading font-extrabold text-3xl sm:text-4xl text-slate-900 mt-2">Timed Agenda</h2>
+          <p class="text-slate-600 text-sm mt-2">Green, Yellow and Red signal times in minutes. During the meeting the current segment is highlighted.</p>
+        </div>
+        <button onclick="downloadAgendaExcel(this)" class="h-11 px-5 rounded-xl bg-[#15803D] hover:bg-[#166534] disabled:opacity-60 disabled:cursor-wait text-white text-sm font-bold transition flex items-center justify-center gap-2 flex-shrink-0">
+          <i class="fas fa-file-excel"></i><span>Download Excel</span>
+        </button>
+      </div>
+
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+        <div role="tablist" aria-label="Filter agenda" class="grid grid-cols-2 sm:flex gap-1 bg-tmGray-light rounded-xl p-1">
+          <button onclick="filterAgenda('all')" id="tab-all" role="tab" class="agenda-tab">All</button>
+          <button onclick="filterAgenda('topics')" id="tab-topics" role="tab" class="agenda-tab">Table Topics</button>
+          <button onclick="filterAgenda('speeches')" id="tab-speeches" role="tab" class="agenda-tab">Speeches</button>
+          <button onclick="filterAgenda('evaluation')" id="tab-evaluation" role="tab" class="agenda-tab">Evaluations</button>
+        </div>
+        <div class="flex items-center bg-tmGray-light rounded-xl p-1 text-xs font-semibold self-start sm:self-auto">
+          <button id="viewBtnTable" onclick="setAgendaView('table')" class="view-btn"><i class="fas fa-table mr-1"></i>Sheet</button>
+          <button id="viewBtnCard" onclick="setAgendaView('cards')" class="view-btn"><i class="fas fa-th-large mr-1"></i>Cards</button>
+        </div>
+      </div>
+
+      <div id="adminAgendaControls" class="hidden mb-5 p-3 bg-amber-50 border border-amber-300 rounded-xl flex flex-wrap gap-2 items-center justify-between">
+        <div class="text-xs text-amber-950 font-semibold">Link a segment to a role and the name updates everywhere.</div>
+        <div class="flex gap-2">
+          <button onclick="openAgendaModal(null, false)" class="px-3 py-2 bg-tmNavy text-white rounded-lg text-xs font-bold"><i class="fas fa-plus mr-1 text-tmGold"></i> Segment</button>
+          <button onclick="openAgendaModal(null, true)" class="px-3 py-2 bg-white border border-tmNavy text-tmNavy rounded-lg text-xs font-bold"><i class="fas fa-grip-lines mr-1"></i> Section</button>
+        </div>
+      </div>
+
+      <div id="agendaTableView" class="rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="bg-tmNavy text-white font-heading font-bold text-[11px] uppercase tracking-wide">
+                <th class="py-3 px-3 text-center w-20">From</th>
+                <th class="py-3 px-3 text-center w-20">To</th>
+                <th class="py-3 px-2 text-center w-12">Min</th>
+                <th class="py-3 px-2 text-center w-10"><span class="inline-block w-3 h-3 rounded-full bg-[#22C55E] align-middle" title="Green"></span></th>
+                <th class="py-3 px-2 text-center w-10"><span class="inline-block w-3 h-3 rounded-full bg-[#F59E0B] align-middle" title="Yellow"></span></th>
+                <th class="py-3 px-2 text-center w-10"><span class="inline-block w-3 h-3 rounded-full bg-[#E11D48] align-middle" title="Red"></span></th>
+                <th class="py-3 px-4">Segment</th>
+                <th class="py-3 px-4">Role player</th>
+                <th class="admin-col hidden py-3 px-2 text-center">Edit</th>
+              </tr>
+            </thead>
+            <tbody id="agendaTableBody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+      <div id="agendaCardsView" class="space-y-2.5 hidden"></div>
+    </div>
+  </section>
+
+  <!-- LINE-UP -->
+  <section id="lineup" class="py-20 sm:py-24 bg-tmGray-light border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+        <div>
+          <div class="eyebrow">Tonight's line-up</div>
+          <h2 class="font-heading font-extrabold text-3xl sm:text-4xl text-slate-900 mt-2">Role Players &amp; Speakers</h2>
+          <p class="text-slate-600 text-sm mt-2">The members who make this meeting happen. Thank you for stepping up!</p>
+        </div>
+        <button id="adminRoleControls" onclick="openRoleModal(null)" class="hidden px-4 py-2.5 bg-amber-400 text-slate-950 rounded-xl text-xs font-bold self-start"><i class="fas fa-user-plus mr-1"></i> Add Role</button>
+      </div>
+      <div id="rolesContainer" class="space-y-10"></div>
+    </div>
+  </section>
+
+  <!-- MEETING PREP -->
+  <section id="prep" class="py-20 sm:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-10">
+        <div class="lg:col-span-7">
+          <div class="eyebrow">Behind the scenes</div>
+          <h2 class="font-heading font-extrabold text-3xl sm:text-4xl text-slate-900 mt-2">Meeting Preparation</h2>
+          <p class="text-slate-600 text-sm mt-2 max-w-2xl">Who is responsible for what before meeting #<span class="mtNoInline"></span>, how many roles are filled, and who is attending. Organizers tick tasks off as they are done.</p>
+        </div>
+        <div class="lg:col-span-5 grid grid-cols-3 gap-3">
+          <div class="rounded-2xl border border-slate-200 p-4 text-center"><div id="statTasks" class="font-heading font-extrabold text-2xl text-tmNavy">0/0</div><div class="text-[11px] text-slate-500">Tasks done</div></div>
+          <div class="rounded-2xl border border-slate-200 p-4 text-center"><div id="statRoles" class="font-heading font-extrabold text-2xl text-tmMaroon">0/0</div><div class="text-[11px] text-slate-500">Roles filled</div></div>
+          <div class="rounded-2xl border border-slate-200 p-4 text-center"><div id="statPeople" class="font-heading font-extrabold text-2xl text-tmNavy">0</div><div class="text-[11px] text-slate-500">Attending</div></div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        <!-- Task checklist -->
+        <div class="lg:col-span-3 rounded-2xl border border-slate-200 overflow-hidden">
+          <div class="relative h-28 sm:h-32">
+            <img src="assets/meeting-prep.jpg" alt="Club members planning a meeting around a table" class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+            <div class="absolute inset-0 bg-gradient-to-r from-tmNavy/95 to-tmNavy/50"></div>
+            <div class="relative h-full px-5 flex items-center justify-between gap-3 text-white">
+              <div>
+                <div class="font-heading font-bold text-lg">Task checklist</div>
+                <div class="text-xs text-slate-200">Owner and deadline for every job</div>
+              </div>
+              <button id="adminTaskControls" onclick="openTaskModal(null)" class="hidden px-3 py-2 bg-amber-400 text-slate-950 rounded-lg text-xs font-bold"><i class="fas fa-plus mr-1"></i> Task</button>
+            </div>
+          </div>
+          <div class="px-5 pt-4">
+            <div class="h-2 rounded-full bg-slate-100 overflow-hidden"><div id="taskProgress" class="h-full bg-[#15803D] rounded-full transition-all" style="width:0%"></div></div>
+          </div>
+          <ul id="taskList" class="divide-y divide-slate-100 px-2 py-2"></ul>
+        </div>
+
+        <!-- Attendance -->
+        <div class="lg:col-span-2 rounded-2xl border border-slate-200 overflow-hidden flex flex-col">
+          <div class="bg-tmMaroon text-white px-5 py-4 flex items-center justify-between gap-3">
+            <div>
+              <div class="font-heading font-bold text-lg">Who's attending</div>
+              <div id="attendSummary" class="text-xs text-white/80"></div>
+            </div>
+            <button id="adminPeopleControls" onclick="openPersonModal(null)" class="hidden px-3 py-2 bg-amber-400 text-slate-950 rounded-lg text-xs font-bold"><i class="fas fa-user-plus mr-1"></i> Add</button>
+          </div>
+          <div class="flex gap-1 p-2 bg-tmGray-light text-xs font-bold" role="tablist" aria-label="Filter attendees">
+            <button onclick="setPeopleFilter('all')" id="pf-all" class="pf-btn">All</button>
+            <button onclick="setPeopleFilter('role')" id="pf-role" class="pf-btn">Role players</button>
+            <button onclick="setPeopleFilter('member')" id="pf-member" class="pf-btn">Members</button>
+            <button onclick="setPeopleFilter('guest')" id="pf-guest" class="pf-btn">Guests</button>
+          </div>
+          <ul id="peopleList" class="divide-y divide-slate-100 flex-1 max-h-[30rem] lg:max-h-[46rem] overflow-y-auto custom-scrollbar"></ul>
+          <div class="p-4 border-t border-slate-100 text-xs text-slate-600 bg-white">
+            Coming along? <a id="rsvpLink" href="#" target="_blank" rel="noopener noreferrer" class="font-bold text-tmMaroon hover:underline">Let our VP Membership know on WhatsApp</a>. Guest names are shown to organizers only.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMER RULES -->
+  <section id="timer" class="py-20 sm:py-24 bg-tmGray-light border-y border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
+        <div>
+          <div class="eyebrow">Timer rules</div>
+          <h2 class="font-heading font-extrabold text-3xl sm:text-4xl text-slate-900 mt-2">Timing Signals</h2>
+          <p class="text-slate-600 text-sm mt-2">Tonight's Timer: <span id="timerName" class="font-bold text-slate-900"></span></p>
+        </div>
+        <div id="adminTimerControls" class="hidden flex gap-2">
+          <button onclick="openTimerModal(null)" class="px-3 py-2 bg-amber-400 text-slate-950 rounded-lg text-xs font-bold"><i class="fas fa-plus mr-1"></i> Rule</button>
+          <button onclick="openNotesModal()" class="px-3 py-2 bg-white border border-amber-400 text-slate-900 rounded-lg text-xs font-bold"><i class="fas fa-sticky-note mr-1"></i> Notes</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6 text-sm">
+        <div class="p-4 rounded-2xl bg-white border border-slate-200 flex items-start gap-3"><span class="w-4 h-4 rounded-full bg-[#15803D] flex-shrink-0 mt-0.5"></span><div><div class="font-heading font-bold">Green</div><div class="text-xs text-slate-600">Minimum time reached.</div></div></div>
+        <div class="p-4 rounded-2xl bg-white border border-slate-200 flex items-start gap-3"><span class="w-4 h-4 rounded-full bg-[#D97706] flex-shrink-0 mt-0.5"></span><div><div class="font-heading font-bold">Yellow</div><div class="text-xs text-slate-600">Begin your conclusion.</div></div></div>
+        <div class="p-4 rounded-2xl bg-white border border-slate-200 flex items-start gap-3"><span class="w-4 h-4 rounded-full bg-[#BE123C] flex-shrink-0 mt-0.5"></span><div><div class="font-heading font-bold">Red</div><div class="text-xs text-slate-600">Time is up. Finish your sentence.</div></div></div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-5">
+        <div class="md:col-span-3 bg-white rounded-2xl border border-slate-200 overflow-hidden">
+          <div class="overflow-x-auto custom-scrollbar">
+            <table class="w-full text-left text-sm border-collapse">
+              <thead>
+                <tr class="bg-tmNavy text-white font-heading text-[11px] uppercase tracking-wide">
+                  <th class="py-3 px-4">Segment</th>
+                  <th class="py-3 px-2 text-center w-16">Green</th>
+                  <th class="py-3 px-2 text-center w-16">Yellow</th>
+                  <th class="py-3 px-2 text-center w-16">Red</th>
+                  <th class="admin-col hidden py-3 px-2 text-center w-28">Edit</th>
+                </tr>
+              </thead>
+              <tbody id="timerTableBody" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="md:col-span-2 bg-white rounded-2xl border border-slate-200 p-5">
+          <div class="font-heading font-bold text-sm text-tmMaroon mb-2"><i class="fas fa-info-circle mr-1"></i> Notes for speakers</div>
+          <ul id="timerNotesList" class="text-sm text-slate-700 space-y-1.5 list-disc pl-5"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXCO -->
+  <section id="exco" class="py-20 sm:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+        <div>
+          <div class="eyebrow">Club leadership</div>
+          <h2 class="font-heading font-extrabold text-3xl sm:text-4xl text-slate-900 mt-2">Executive Committee <span id="excoTerm" class="text-slate-400 font-bold text-2xl"></span></h2>
+          <p class="text-slate-600 text-sm mt-2">The officers who run the club, plan our meetings and look after members and guests.</p>
+        </div>
+        <button id="adminExcoControls" onclick="openExcoModal(null)" class="hidden px-4 py-2.5 bg-amber-400 text-slate-950 rounded-xl text-xs font-bold self-start"><i class="fas fa-user-plus mr-1"></i> Add Officer</button>
+      </div>
+      <div id="excoContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6"></div>
+    </div>
+  </section>
+
+  <!-- VISIT US -->
+  <section id="visit" class="visit-bg text-white py-20 sm:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+      <div class="space-y-5">
+        <div class="text-xs font-heading font-extrabold tracking-[.16em] uppercase text-tmGold">Visit us</div>
+        <h2 class="font-heading font-extrabold text-3xl sm:text-5xl leading-tight">Be our guest at the next meeting</h2>
+        <p class="text-white/85 leading-relaxed max-w-xl">Guests are always welcome. Watch a meeting, try a Table Topic if you like, and see how Toastmasters can help you speak with confidence. There's no obligation to join.</p>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a id="visitContactBtn" href="#" target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 bg-tmGold hover:bg-tmGold-dark text-tmNavy-dark font-heading font-extrabold text-sm rounded-xl text-center transition"><i class="fab fa-whatsapp mr-1.5"></i> <span id="visitContactText">Contact our VPM</span></a>
+          <a href="https://linktr.ee/oneworldtoastmastersclub" target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 bg-white/10 hover:bg-white/20 border border-white/30 font-heading font-bold text-sm rounded-xl text-center transition"><i class="fas fa-link mr-1.5 text-tmGold"></i> All club links</a>
+        </div>
+      </div>
+      <div class="bg-white/10 backdrop-blur border border-white/20 rounded-3xl p-6 space-y-4 text-sm">
+        <div class="flex items-start gap-3"><i class="far fa-calendar-alt text-tmGold text-lg mt-0.5 w-5"></i><div><div class="font-heading font-bold">When</div><div id="visitSchedule" class="text-white/85"></div></div></div>
+        <div class="flex items-start gap-3"><i class="fas fa-map-marker-alt text-tmGold text-lg mt-0.5 w-5"></i><div><div class="font-heading font-bold">Where</div><div id="visitVenue" class="text-white/85"></div><a id="visitMap" href="#" target="_blank" rel="noopener noreferrer" class="font-bold text-tmGold hover:underline text-xs">Google Maps <i class="fas fa-external-link-alt text-[9px]"></i></a></div></div>
+        <div class="flex items-start gap-3"><i class="fas fa-video text-tmGold text-lg mt-0.5 w-5"></i><div><div class="font-heading font-bold">Online</div><div class="text-white/85">Every meeting is hybrid. Join on Zoom from anywhere.</div></div></div>
+        <div class="flex items-start gap-3"><i class="fas fa-globe-asia text-tmGold text-lg mt-0.5 w-5"></i><div><div class="font-heading font-bold">Toastmasters International</div><a href="https://www.toastmasters.org" target="_blank" rel="noopener noreferrer" class="text-white/85 hover:text-tmGold underline">toastmasters.org</a></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-tmNavy-dark text-slate-300 pt-12 pb-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+        <div class="flex items-center gap-3">
+          <div class="bg-white rounded-xl p-1.5"><img src="assets/tm-logo.png" alt="Toastmasters International logo" width="48" height="40" class="w-12 h-auto" /></div>
+          <div>
+            <div class="font-heading font-extrabold text-white">OneWorld Toastmasters Club</div>
+            <div class="text-xs">Club 01589773 • Area W4 • Division W • District 51</div>
+            <div class="text-[11px] font-heading font-bold tracking-widest text-tmGold uppercase mt-1">Where Leaders Are Made</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs font-semibold">
+          <a href="#about" class="hover:text-tmGold">About</a><a href="#meeting" class="hover:text-tmGold">Next Meeting</a><a href="#agenda" class="hover:text-tmGold">Agenda</a>
+          <a href="#prep" class="hover:text-tmGold">Meeting Prep</a><a href="#exco" class="hover:text-tmGold">Exco</a><a href="#visit" class="hover:text-tmGold">Visit Us</a>
+          <button onclick="copyShareLink()" class="hover:text-tmGold"><i class="fas fa-share-alt mr-1"></i>Share</button>
+        </div>
+      </div>
+      <div class="text-[11px] leading-relaxed text-center border-t border-white/10 pt-6 space-y-2 max-w-4xl mx-auto">
+        <p>The information on this website is for the sole use of Toastmasters' members, for Toastmasters business only. It is not to be used for solicitation and distribution of non-Toastmasters material or information.</p>
+        <p class="text-slate-400">Toastmasters International, the Toastmasters International logo, and all other Toastmasters International trademarks and copyrights are the sole property of Toastmasters International.</p>
+        <p class="text-slate-500">Stock photos from Unsplash. &copy; 2026 OneWorld Toastmasters Club</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===================== MODALS ===================== -->
+  <div id="agendaModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+      <button onclick="closeModal('agendaModal')" aria-label="Close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700">✕</button>
+      <h3 id="agendaModalTitle" class="font-heading font-bold text-lg text-slate-900 mb-4">Edit Segment</h3>
+      <form onsubmit="saveAgendaItem(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="agId" /><input type="hidden" id="agBanner" />
+        <div><label for="agProgram" id="agProgramLabel" class="block font-bold text-slate-600 mb-1">Segment title</label><input type="text" id="agProgram" required class="w-full p-2.5 border rounded-xl" /></div>
+        <div id="agNonBannerFields" class="space-y-3">
+          <div class="grid grid-cols-3 gap-2">
+            <div><label for="agFrom" class="block font-bold text-slate-600 mb-1">From</label><input type="text" id="agFrom" placeholder="7:45 PM" class="w-full p-2.5 border rounded-xl" /></div>
+            <div><label for="agMins" class="block font-bold text-slate-600 mb-1">Minutes</label><input type="number" min="0" step="1" id="agMins" class="w-full p-2.5 border rounded-xl" /></div>
+            <div><label for="agTo" class="block font-bold text-slate-600 mb-1">To</label><input type="text" id="agTo" class="w-full p-2.5 border rounded-xl" /></div>
+          </div>
+          <p class="text-[11px] text-slate-500 -mt-1">Change From or Minutes and To is filled in for you.</p>
+          <div class="grid grid-cols-3 gap-2">
+            <div><label for="agG" class="block text-[10px] font-bold text-emerald-700 mb-0.5">Green</label><input type="text" id="agG" class="w-full p-2 border border-emerald-300 rounded-lg" /></div>
+            <div><label for="agY" class="block text-[10px] font-bold text-amber-700 mb-0.5">Yellow</label><input type="text" id="agY" class="w-full p-2 border border-amber-300 rounded-lg" /></div>
+            <div><label for="agR" class="block text-[10px] font-bold text-rose-700 mb-0.5">Red</label><input type="text" id="agR" class="w-full p-2 border border-rose-300 rounded-lg" /></div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div><label for="agCategory" class="block font-bold text-slate-600 mb-1">Filter tab</label>
+              <select id="agCategory" class="w-full p-2.5 border rounded-xl bg-white"><option value="general">General</option><option value="topics">Table Topics</option><option value="speeches">Speeches</option><option value="evaluation">Evaluations</option></select></div>
+            <div><label for="agRoleId" class="block font-bold text-slate-600 mb-1">Linked role</label><select id="agRoleId" class="w-full p-2.5 border rounded-xl bg-white"></select></div>
+          </div>
+          <div><label for="agRolePlayer" class="block font-bold text-slate-600 mb-1">Role player (only when no role is linked)</label><input type="text" id="agRolePlayer" class="w-full p-2.5 border rounded-xl" /></div>
+          <div><label for="agDetails" class="block font-bold text-slate-600 mb-1">Details</label><textarea id="agDetails" rows="2" class="w-full p-2.5 border rounded-xl"></textarea></div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal('agendaModal')" class="px-4 py-2 bg-slate-100 rounded-xl">Cancel</button><button type="submit" class="px-5 py-2 bg-tmNavy text-white rounded-xl font-bold">Save</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="roleModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+      <button onclick="closeModal('roleModal')" aria-label="Close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700">✕</button>
+      <h3 id="roleModalTitle" class="font-heading font-bold text-lg text-slate-900 mb-4">Edit Role Player</h3>
+      <form onsubmit="saveRole(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="roleId" />
+        <div data-photo-block="role"></div>
+        <div class="grid grid-cols-2 gap-2">
+          <div><label for="roleTitle" class="block font-bold text-slate-600 mb-1">Role</label><input type="text" id="roleTitle" required class="w-full p-2.5 border rounded-xl" placeholder="e.g. Timer" /></div>
+          <div><label for="roleGroup" class="block font-bold text-slate-600 mb-1">Group</label>
+            <select id="roleGroup" class="w-full p-2.5 border rounded-xl bg-white"><option value="leaders">Meeting Leaders</option><option value="speakers">Prepared Speakers</option><option value="evaluators">Evaluators</option><option value="functionaries">Functionaries</option></select></div>
+        </div>
+        <div><label for="roleName" class="block font-bold text-slate-600 mb-1">Name &amp; designation</label><input type="text" id="roleName" class="w-full p-2.5 border rounded-xl" placeholder="Leave blank if the role is still open" /></div>
+        <div class="p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+          <div class="font-bold text-slate-700">Speakers only</div>
+          <div><label for="roleSpeech" class="block font-bold text-slate-600 mb-1">Speech title</label><input type="text" id="roleSpeech" class="w-full p-2.5 border rounded-xl" /></div>
+          <div class="grid grid-cols-2 gap-2">
+            <div><label for="roleProject" class="block font-bold text-slate-600 mb-1">Path &amp; project</label><input type="text" id="roleProject" class="w-full p-2.5 border rounded-xl" /></div>
+            <div><label for="roleTime" class="block font-bold text-slate-600 mb-1">Speech time</label><input type="text" id="roleTime" class="w-full p-2.5 border rounded-xl" placeholder="5–7 min" /></div>
+          </div>
+        </div>
+        <div><label for="roleDesc" class="block font-bold text-slate-600 mb-1">Short description</label><textarea id="roleDesc" rows="2" class="w-full p-2.5 border rounded-xl"></textarea></div>
+        <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal('roleModal')" class="px-4 py-2 bg-slate-100 rounded-xl">Cancel</button><button type="submit" class="px-5 py-2 bg-tmMaroon text-white rounded-xl font-bold">Save</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="excoModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+      <button onclick="closeModal('excoModal')" aria-label="Close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700">✕</button>
+      <h3 id="excoModalTitle" class="font-heading font-bold text-lg text-slate-900 mb-4">Edit Officer</h3>
+      <form onsubmit="saveExco(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="excoId" />
+        <div data-photo-block="exco"></div>
+        <div class="grid grid-cols-2 gap-2">
+          <div><label for="excoTitle" class="block font-bold text-slate-600 mb-1">Office</label><input type="text" id="excoTitle" required class="w-full p-2.5 border rounded-xl" placeholder="e.g. VP Education" /></div>
+          <div><label for="excoName" class="block font-bold text-slate-600 mb-1">Name &amp; designation</label><input type="text" id="excoName" class="w-full p-2.5 border rounded-xl" /></div>
+        </div>
+        <div><label for="excoDesc" class="block font-bold text-slate-600 mb-1">What they look after</label><input type="text" id="excoDesc" class="w-full p-2.5 border rounded-xl" /></div>
+        <div><label for="excoContact" class="block font-bold text-slate-600 mb-1">Contact link (optional, e.g. https://wa.me/60…)</label><input type="url" id="excoContact" class="w-full p-2.5 border rounded-xl" /></div>
+        <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal('excoModal')" class="px-4 py-2 bg-slate-100 rounded-xl">Cancel</button><button type="submit" class="px-5 py-2 bg-tmNavy text-white rounded-xl font-bold">Save</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="taskModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closeModal('taskModal')" aria-label="Close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700">✕</button>
+      <h3 class="font-heading font-bold text-lg text-slate-900 mb-4">Preparation Task</h3>
+      <form onsubmit="saveTask(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="tkId" />
+        <div><label for="tkTask" class="block font-bold text-slate-600 mb-1">Task</label><input type="text" id="tkTask" required class="w-full p-2.5 border rounded-xl" /></div>
+        <div class="grid grid-cols-2 gap-2">
+          <div><label for="tkOwnerId" class="block font-bold text-slate-600 mb-1">Owner (officer)</label><select id="tkOwnerId" class="w-full p-2.5 border rounded-xl bg-white"></select></div>
+          <div><label for="tkOwner" class="block font-bold text-slate-600 mb-1">…or another person</label><input type="text" id="tkOwner" class="w-full p-2.5 border rounded-xl" /></div>
+        </div>
+        <div><label for="tkDue" class="block font-bold text-slate-600 mb-1">Due</label><input type="text" id="tkDue" class="w-full p-2.5 border rounded-xl" placeholder="e.g. 3 days before" /></div>
+        <label class="flex items-center gap-2 font-bold text-slate-600"><input type="checkbox" id="tkDone" class="w-4 h-4" /> Done</label>
+        <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal('taskModal')" class="px-4 py-2 bg-slate-100 rounded-xl">Cancel</button><button type="submit" class="px-5 py-2 bg-tmNavy text-white rounded-xl font-bold">Save</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="personModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closeModal('personModal')" aria-label="Close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700">✕</button>
+      <h3 class="font-heading font-bold text-lg text-slate-900 mb-1">Attendee</h3>
+      <p class="text-[11px] text-slate-500 mb-4">Role players are listed automatically from the line-up.</p>
+      <form onsubmit="savePerson(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="psId" />
+        <div><label for="psName" class="block font-bold text-slate-600 mb-1">Name</label><input type="text" id="psName" required class="w-full p-2.5 border rounded-xl" /></div>
+        <div class="grid grid-cols-2 gap-2">
+          <div><label for="psType" class="block font-bold text-slate-600 mb-1">Type</label><select id="psType" class="w-full p-2.5 border rounded-xl bg-white"><option value="member">Member</option><option value="guest">Guest</option></select></div>
+          <div><label for="psMode" class="block font-bold text-slate-600 mb-1">Joining</label><select id="psMode" class="w-full p-2.5 border rounded-xl bg-white"><option value="venue">At the venue</option><option value="zoom">On Zoom</option></select></div>
+        </div>
+        <div><label for="psNote" class="block font-bold text-slate-600 mb-1">Note (e.g. invited by, from which club)</label><input type="text" id="psNote" class="w-full p-2.5 border rounded-xl" /></div>
+        <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal('personModal')" class="px-4 py-2 bg-slate-100 rounded-xl">Cancel</button><button type="submit" class="px-5 py-2 bg-tmMaroon text-white rounded-xl font-bold">Save</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="meetingModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+      <button onclick="closeModal('meetingModal')" aria-label="Close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700">✕</button>
+      <h3 class="font-heading font-bold text-lg text-slate-900 mb-4">Meeting Details</h3>
+      <form onsubmit="saveMeeting(event)" class="space-y-3 text-xs">
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <div><label for="mNo" class="block font-bold text-slate-600 mb-1">Meeting #</label><input type="text" id="mNo" class="w-full p-2.5 border rounded-xl" /></div>
+          <div><label for="mDate" class="block font-bold text-slate-600 mb-1">Date</label><input type="date" id="mDate" required class="w-full p-2.5 border rounded-xl" /></div>
+          <div><label for="mStart" class="block font-bold text-slate-600 mb-1">Start (MYT)</label><input type="time" id="mStart" required class="w-full p-2.5 border rounded-xl" /></div>
+          <div><label for="mEnd" class="block font-bold text-slate-600 mb-1">End (MYT)</label><input type="time" id="mEnd" required class="w-full p-2.5 border rounded-xl" /></div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div><label for="mFormat" class="block font-bold text-slate-600 mb-1">Format</label><input type="text" id="mFormat" class="w-full p-2.5 border rounded-xl" placeholder="Hybrid" /></div>
+          <div><label for="mTheme" class="block font-bold text-slate-600 mb-1">Theme</label><input type="text" id="mTheme" class="w-full p-2.5 border rounded-xl" /></div>
+        </div>
+        <div class="grid grid-cols-3 gap-2">
+          <div><label for="mWod" class="block font-bold text-slate-600 mb-1">Word of the Day</label><input type="text" id="mWod" class="w-full p-2.5 border rounded-xl" /></div>
+          <div><label for="mWodSay" class="block font-bold text-slate-600 mb-1">Pronunciation</label><input type="text" id="mWodSay" class="w-full p-2.5 border rounded-xl" /></div>
+          <div><label for="mWodMeaning" class="block font-bold text-slate-600 mb-1">Meaning</label><input type="text" id="mWodMeaning" class="w-full p-2.5 border rounded-xl" /></div>
+        </div>
+        <div><label for="mDesc" class="block font-bold text-slate-600 mb-1">Intro text</label><textarea id="mDesc" rows="2" class="w-full p-2.5 border rounded-xl"></textarea></div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <div><label for="mZoomUrl" class="block font-bold text-slate-600 mb-1">Zoom link</label><input type="url" id="mZoomUrl" class="w-full p-2.5 border rounded-xl" /></div>
+          <div><label for="mZoomId" class="block font-bold text-slate-600 mb-1">Zoom meeting ID</label><input type="text" id="mZoomId" class="w-full p-2.5 border rounded-xl" /></div>
+          <div><label for="mZoomPass" class="block font-bold text-slate-600 mb-1">Zoom passcode</label><input type="text" id="mZoomPass" class="w-full p-2.5 border rounded-xl" /></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <div><label for="mVenueName" class="block font-bold text-slate-600 mb-1">Venue short name</label><input type="text" id="mVenueName" class="w-full p-2.5 border rounded-xl" /></div>
+          <div class="sm:col-span-2"><label for="mVenueAddr" class="block font-bold text-slate-600 mb-1">Venue address</label><input type="text" id="mVenueAddr" class="w-full p-2.5 border rounded-xl" /></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div><label for="mMapUrl" class="block font-bold text-slate-600 mb-1">Google Maps link</label><input type="url" id="mMapUrl" class="w-full p-2.5 border rounded-xl" /></div>
+          <div><label for="mSchedule" class="block font-bold text-slate-600 mb-1">Regular meetings line</label><input type="text" id="mSchedule" class="w-full p-2.5 border rounded-xl" /></div>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <div><label for="mContactUrl" class="block font-bold text-slate-600 mb-1">Guest contact (WhatsApp link)</label><input type="url" id="mContactUrl" class="w-full p-2.5 border rounded-xl" /></div>
+          <div><label for="mContactText" class="block font-bold text-slate-600 mb-1">Contact button text</label><input type="text" id="mContactText" class="w-full p-2.5 border rounded-xl" /></div>
+          <div><label for="mTerm" class="block font-bold text-slate-600 mb-1">Exco term</label><input type="text" id="mTerm" class="w-full p-2.5 border rounded-xl" placeholder="2026–2027" /></div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal('meetingModal')" class="px-4 py-2 bg-slate-100 rounded-xl">Cancel</button><button type="submit" class="px-5 py-2 bg-tmNavy text-white rounded-xl font-bold">Save</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="linkModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closeModal('linkModal')" aria-label="Close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700">✕</button>
+      <h3 class="font-heading font-bold text-lg text-slate-900 mb-4">Link</h3>
+      <form onsubmit="saveLink(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="lkId" />
+        <div><label for="lkTitle" class="block font-bold text-slate-600 mb-1">Title</label><input type="text" id="lkTitle" required class="w-full p-2.5 border rounded-xl" /></div>
+        <div><label for="lkDesc" class="block font-bold text-slate-600 mb-1">Short description</label><input type="text" id="lkDesc" class="w-full p-2.5 border rounded-xl" /></div>
+        <div><label for="lkUrl" class="block font-bold text-slate-600 mb-1">Link (https://…)</label><input type="url" id="lkUrl" required class="w-full p-2.5 border rounded-xl" /></div>
+        <div><label for="lkIcon" class="block font-bold text-slate-600 mb-1">Icon</label>
+          <select id="lkIcon" class="w-full p-2.5 border rounded-xl bg-white">
+            <option value="fas fa-video">Video / Zoom</option><option value="fas fa-poll">Vote / Poll</option><option value="fas fa-table">Sheet</option>
+            <option value="fas fa-folder-open">Folder</option><option value="fas fa-user-tag">Roles</option><option value="fas fa-toolbox">Kit</option>
+            <option value="fab fa-whatsapp">WhatsApp</option><option value="fas fa-trophy">Contest</option><option value="fas fa-link">Link</option>
+          </select></div>
+        <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal('linkModal')" class="px-4 py-2 bg-slate-100 rounded-xl">Cancel</button><button type="submit" class="px-5 py-2 bg-tmNavy text-white rounded-xl font-bold">Save</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="timerModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl relative">
+      <button onclick="closeModal('timerModal')" aria-label="Close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700">✕</button>
+      <h3 class="font-heading font-bold text-lg text-slate-900 mb-4">Timer Rule</h3>
+      <form onsubmit="saveTimerRule(event)" class="space-y-3 text-xs">
+        <input type="hidden" id="trId" />
+        <div><label for="trLabel" class="block font-bold text-slate-600 mb-1">Segment</label><input type="text" id="trLabel" required class="w-full p-2.5 border rounded-xl" /></div>
+        <div class="grid grid-cols-3 gap-2">
+          <div><label for="trG" class="block text-[10px] font-bold text-emerald-700 mb-0.5">Green</label><input type="text" id="trG" class="w-full p-2 border border-emerald-300 rounded-lg" /></div>
+          <div><label for="trY" class="block text-[10px] font-bold text-amber-700 mb-0.5">Yellow</label><input type="text" id="trY" class="w-full p-2 border border-amber-300 rounded-lg" /></div>
+          <div><label for="trR" class="block text-[10px] font-bold text-rose-700 mb-0.5">Red</label><input type="text" id="trR" class="w-full p-2 border border-rose-300 rounded-lg" /></div>
+        </div>
+        <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal('timerModal')" class="px-4 py-2 bg-slate-100 rounded-xl">Cancel</button><button type="submit" class="px-5 py-2 bg-tmNavy text-white rounded-xl font-bold">Save</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="notesModal" class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative">
+      <button onclick="closeModal('notesModal')" aria-label="Close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700">✕</button>
+      <h3 class="font-heading font-bold text-lg text-slate-900 mb-4">Timer Notes</h3>
+      <form onsubmit="saveNotes(event)" class="space-y-3 text-xs">
+        <label for="notesText" class="block font-bold text-slate-600">One note per line</label>
+        <textarea id="notesText" rows="7" class="w-full p-2.5 border rounded-xl"></textarea>
+        <div class="flex justify-end gap-2 pt-2"><button type="button" onclick="closeModal('notesModal')" class="px-4 py-2 bg-slate-100 rounded-xl">Cancel</button><button type="submit" class="px-5 py-2 bg-tmNavy text-white rounded-xl font-bold">Save</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-6 right-6 left-6 sm:left-auto z-[60] bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs sm:text-sm translate-y-20 opacity-0 pointer-events-none transition-all duration-300">
+    <i class="fas fa-info-circle text-tmGold"></i><span id="toastMsg"></span>
+  </div>
+
+  <script>
+    // ================= 1. DEFAULT DATA =================
+    // data.json (next to this file) overrides these when present. Organizers publish by
+    // replacing data.json in the GitHub repo with the file downloaded from organizer mode.
+    const DEFAULT_MEETING = {
+      no: '362', date: '2026-11-12', start: '19:45', end: '21:45', format: 'Hybrid',
+      theme: 'Dare to be Different', wod: 'Bold', wodSay: '/BOHLD/', wodMeaning: 'Confident and courageous; willing to take risks.',
+      desc: 'Join us in person or on Zoom for an evening of prepared speeches, Table Topics and evaluations. Guests are always welcome!',
+      zoomUrl: 'https://us02web.zoom.us/j/6797189868?pwd=cb9Ng0qnlJbxu0z6dsZy9BrnoU5abl.1&omn=84597425145',
+      zoomId: '679 718 9868', zoomPass: '888888',
+      venueName: 'Plaza Usahawan, Kuala Lumpur',
+      venueAddr: 'Plaza Usahawan, 2-2, Jalan Danau Niaga 1, Jalan Genting Kelang, 53100 Kuala Lumpur',
+      mapUrl: 'https://maps.app.goo.gl/U7eXTWFiQYffsyGA7',
+      schedule: 'Every 2nd & 4th Thursday • 7:45 PM – 9:45 PM (MYT)',
+      contactUrl: 'https://wa.me/60122096181', contactText: 'Chat with Gladys (VPM)',
+      term: '2026–2027',
+      timerNotes: [
+        'Signals are shown in the room and on Zoom (coloured card or virtual background).',
+        'Ice Breaker speeches run 4–6 minutes. Most other Pathways speeches run 5–7 minutes.',
+        'The Timer records every speaker\'s time and reads them out in the Timer\'s report.',
+        'Speakers more than 30 seconds outside their time range are not eligible for the evening\'s awards.'
+      ]
+    };
+
+    const DEFAULT_ROLES = [
+      { id: 'president', group: 'leaders', title: 'Presiding Officer', name: 'Arulmani, PI3', desc: 'Welcomes everyone, opens the meeting and presents the awards.' },
+      { id: 'saa', group: 'leaders', title: 'Sergeant at Arms', name: 'Lewis Low, DL4', desc: 'Opens with the SAA briefing and house rules.' },
+      { id: 'tmod', group: 'leaders', title: 'Toastmaster of the Day', name: 'Harpreet Kaur, DTM', desc: 'Hosts the meeting and introduces every role player.' },
+      { id: 'ttm', group: 'leaders', title: 'Table Topics Master', name: 'Arulmani, PI3', desc: 'Runs the impromptu speaking session.' },
+      { id: 'ge', group: 'leaders', title: 'General Evaluator', name: 'Catherine Paul, PM5, DL2', desc: 'Leads the evaluation team and evaluates the whole meeting.' },
+      { id: 'sp1', group: 'speakers', title: 'Speaker 1', name: 'Hanis Azmi', speech: 'One Step at a Time', project: 'Dynamic Leadership • Ice Breaker', time: '4–6 min' },
+      { id: 'sp2', group: 'speakers', title: 'Speaker 2', name: 'Mohd Jamil', speech: 'Adventure of Belief n Trust', project: 'Presentation Mastery • Ice Breaker', time: '4–6 min' },
+      { id: 'sp3', group: 'speakers', title: 'Speaker 3', name: 'Gladys Choo, DTM', speech: '30 Days, 4 Hrs & 4 Generations', project: 'Engaging Humor • Evaluation & Feedback', time: '5–7 min' },
+      { id: 'tte', group: 'evaluators', title: 'Table Topics Evaluator', name: 'Ann Alexander, LD5', desc: 'Evaluates the Table Topics speakers.' },
+      { id: 'ev1', group: 'evaluators', title: 'Evaluator 1', name: 'Cheam Chin Yew, EC5, IP1', desc: 'Evaluates Speaker 1.' },
+      { id: 'ev2', group: 'evaluators', title: 'Evaluator 2', name: 'Shamen Kumar, MS2', desc: 'Evaluates Speaker 2.' },
+      { id: 'ev3', group: 'evaluators', title: 'Evaluator 3', name: 'Ricky Soo, DTM', desc: 'Evaluates Speaker 3.' },
+      { id: 'timer', group: 'functionaries', title: 'Timer', name: 'Lewis Low, DL4', desc: 'Shows the timing signals and reports every speaker\'s time.' },
+      { id: 'ah', group: 'functionaries', title: 'Ah-Counter', name: 'Syahran, DL2', desc: 'Notes filler words such as "ah" and "um".' },
+      { id: 'gram', group: 'functionaries', title: 'Grammarian', name: 'Michael Xavier, LD2', desc: 'Introduces the Word of the Day and reports on language.' }
+    ];
+
+    const DEFAULT_AGENDA = [
+      { id: 'b1', banner: true, program: 'Introduction' },
+      { id: 'a1', from: '7:45 PM', to: '7:50 PM', mins: '5', g: '3', y: '4', r: '5', program: 'SAA Briefing', roleId: 'saa', category: 'general' },
+      { id: 'a2', from: '7:51 PM', to: '7:56 PM', mins: '5', g: '3', y: '4', r: '5', program: 'President welcomes members & guests and calls the meeting to order', roleId: 'president', category: 'general' },
+      { id: 'a3', from: '7:57 PM', to: '8:09 PM', mins: '12', g: '10', y: '11', r: '12', program: 'Toastmaster of the Day takes control', details: 'Theme: Dare to be Different', roleId: 'tmod', category: 'general' },
+      { id: 'a4', from: '8:16 PM', to: '8:28 PM', mins: '12', g: '10', y: '11', r: '12', program: 'Table Topics session', details: 'Each speaker: Green 1:00 • Yellow 1:30 • Red 2:00', roleId: 'ttm', category: 'topics' },
+      { id: 'a5', from: '8:29 PM', to: '8:30 PM', mins: '1', g: '', y: '', r: '1', program: "Timer's report (Table Topics)", roleId: 'timer', category: 'topics' },
+      { id: 'b2', banner: true, program: 'Prepared Speeches' },
+      { id: 'a6', from: '8:31 PM', to: '8:37 PM', mins: '6', g: '4', y: '5', r: '6', program: 'Speaker 1', roleId: 'sp1', category: 'speeches' },
+      { id: 'a7', from: '8:38 PM', to: '8:46 PM', mins: '6', g: '4', y: '5', r: '6', program: 'Speaker 2', roleId: 'sp2', category: 'speeches' },
+      { id: 'a8', from: '8:47 PM', to: '8:54 PM', mins: '7', g: '5', y: '6', r: '7', program: 'Speaker 3', roleId: 'sp3', category: 'speeches' },
+      { id: 'b3', banner: true, program: 'Evaluation & Feedback' },
+      { id: 'a9', from: '8:55 PM', to: '9:00 PM', mins: '5', g: '3', y: '4', r: '5', program: 'Table Topics Evaluator', roleId: 'tte', category: 'evaluation' },
+      { id: 'a10', from: '9:01 PM', to: '9:04 PM', mins: '3', g: '2', y: '2.5', r: '3', program: 'Evaluator for Speaker 1', roleId: 'ev1', category: 'evaluation' },
+      { id: 'a11', from: '9:05 PM', to: '9:08 PM', mins: '3', g: '2', y: '2.5', r: '3', program: 'Evaluator for Speaker 2', roleId: 'ev2', category: 'evaluation' },
+      { id: 'a12', from: '9:09 PM', to: '9:12 PM', mins: '3', g: '2', y: '2.5', r: '3', program: 'Evaluator for Speaker 3', roleId: 'ev3', category: 'evaluation' },
+      { id: 'b4', banner: true, program: "Role Players' Reports" },
+      { id: 'a13', from: '9:13 PM', to: '9:16 PM', mins: '3', g: '2', y: '2.5', r: '3', program: "Grammarian's report", details: 'General Evaluator invites the role players to report', roleId: 'gram', category: 'evaluation' },
+      { id: 'a14', from: '9:17 PM', to: '9:20 PM', mins: '3', g: '2', y: '2.5', r: '3', program: "Ah-Counter's report", roleId: 'ah', category: 'evaluation' },
+      { id: 'a15', from: '9:21 PM', to: '9:24 PM', mins: '3', g: '2', y: '2.5', r: '3', program: "Timer's report", roleId: 'timer', category: 'evaluation' },
+      { id: 'a16', from: '9:25 PM', to: '9:30 PM', mins: '5', g: '2', y: '4', r: '5', program: "General Evaluator's report", roleId: 'ge', category: 'evaluation' },
+      { id: 'b5', banner: true, program: 'Closing' },
+      { id: 'a17', from: '9:31 PM', to: '9:34 PM', mins: '3', g: '2', y: '2.5', r: '3', program: "President's closing & award presentation", details: 'Vote for the best role players on Slido', roleId: 'president', category: 'general' },
+      { id: 'a18', from: '9:35 PM', to: '9:38 PM', mins: '3', g: '3', y: '4', r: '5', program: 'Feedback from guests & meeting adjourned', rolePlayer: 'Guests', category: 'general' }
+    ];
+
+    const DEFAULT_LINKS = [
+      { id: 'l2', title: 'Vote on Slido', desc: 'Best speaker, evaluator & Table Topics', url: 'https://app.sli.do/event/18715eEWC9HTnQYKbCsv6S/live/polls', icon: 'fas fa-poll' },
+      { id: 'l3', title: 'Meeting materials', desc: 'Poster, Zoom background, slides', url: 'https://drive.google.com/drive/folders/1n6_3uVUikLh5XvZ_69eetu-YqXHgjykJ?usp=drive_link', icon: 'fas fa-folder-open' },
+      { id: 'l4', title: 'Agenda sheet', desc: 'Working Google Sheet', url: 'https://docs.google.com/spreadsheets/d/1aTq0Opg60ejB27fCVoRlNGSp_4g2Wp4gT-p4BNS9FFY/edit?usp=sharing', icon: 'fas fa-table' },
+      { id: 'l5', title: 'Sign up for a role', desc: 'Role sheet for upcoming meetings', url: 'https://docs.google.com/spreadsheets/d/1hla_YCfB_tvPz44KW6yTqs0IsNwaMr3joFmUYkbbrSc/edit?usp=sharing', icon: 'fas fa-user-tag' },
+      { id: 'l6', title: "Role Players' Kit", desc: 'Scripts and guides for every role', url: 'https://drive.google.com/drive/folders/1v10hLM6F9NTMZ3-_JHw1Cr8w4TxaUgiV', icon: 'fas fa-toolbox' },
+      { id: 'l7', title: 'Talk to our VPM', desc: 'Questions about joining', url: 'https://wa.me/60122096181', icon: 'fab fa-whatsapp' },
+      { id: 'l8', title: 'Club Contests', desc: '26 Nov 2026 • Speech, Evaluation, Table Topics', url: 'https://marulmani.github.io/oneworld-tmc-contests/', icon: 'fas fa-trophy' },
+      { id: 'l9', title: 'All club links', desc: 'Our Linktree', url: 'https://linktr.ee/oneworldtoastmastersclub', icon: 'fas fa-link' }
+    ];
+
+    const DEFAULT_TIMER_RULES = [
+      { id: 't1', label: 'Table Topics', g: '1:00', y: '1:30', r: '2:00' },
+      { id: 't2', label: 'Ice Breaker speech', g: '4:00', y: '5:00', r: '6:00' },
+      { id: 't3', label: 'Standard Pathways speech', g: '5:00', y: '6:00', r: '7:00' },
+      { id: 't4', label: 'Speech evaluation', g: '2:00', y: '2:30', r: '3:00' },
+      { id: 't5', label: 'Table Topics evaluation', g: '3:00', y: '4:00', r: '5:00' },
+      { id: 't6', label: 'Grammarian, Ah-Counter & Timer reports', g: '2:00', y: '2:30', r: '3:00' },
+      { id: 't7', label: "General Evaluator's report", g: '2:00', y: '4:00', r: '5:00' }
+    ];
+
+    // Executive committee. Names left blank show as "To be updated".
+    const DEFAULT_EXCO = [
+      { id: 'x_pres', title: 'President', name: 'Arulmani, PI3', desc: 'Leads the club and chairs exco meetings.' },
+      { id: 'x_vpe', title: 'VP Education', name: '', desc: 'Plans meetings, roles and member education.' },
+      { id: 'x_vpm', title: 'VP Membership', name: 'Gladys Choo, DTM', desc: 'Welcomes guests and new members.', contact: 'https://wa.me/60122096181' },
+      { id: 'x_vppr', title: 'VP Public Relations', name: '', desc: 'Promotes the club and our meetings.' },
+      { id: 'x_sec', title: 'Secretary', name: '', desc: 'Keeps club records and minutes.' },
+      { id: 'x_tre', title: 'Treasurer', name: '', desc: 'Manages dues and club funds.' },
+      { id: 'x_saa', title: 'Sergeant at Arms', name: '', desc: 'Looks after the venue, equipment and Zoom.' },
+      { id: 'x_ipp', title: 'Immediate Past President', name: '', desc: 'Advises the committee.' }
+    ];
+
+    // Before-meeting checklist. ownerId points at an exco officer.
+    const DEFAULT_TASKS = [
+      { id: 'k1', task: 'Confirm Toastmaster of the Day and theme', ownerId: 'x_vpe', due: '2 weeks before', done: true },
+      { id: 'k2', task: 'Fill every meeting role on the role sheet', ownerId: 'x_vpe', due: '1 week before', done: true },
+      { id: 'k3', task: 'Collect speech titles, paths and projects', ownerId: 'x_vpe', due: '5 days before', done: true },
+      { id: 'k4', task: 'Design the meeting poster and post on social media', ownerId: 'x_vppr', due: '5 days before', done: true },
+      { id: 'k5', task: 'Publish the agenda and update this website', ownerId: 'x_vpe', due: '3 days before', done: true },
+      { id: 'k6', task: 'Invite guests and confirm who is coming', ownerId: 'x_vpm', due: '2 days before', done: false },
+      { id: 'k7', task: 'Send the Zoom link and reminder on WhatsApp', ownerId: 'x_sec', due: '1 day before', done: false },
+      { id: 'k8', task: 'Set up the Slido voting poll', ownerId: 'x_vpe', due: '1 day before', done: false },
+      { id: 'k9', task: 'Book the venue, set up the room, camera and mic', ownerId: 'x_saa', due: 'On the day', done: false },
+      { id: 'k10', task: 'Host Zoom: admit guests, spotlight speakers', ownerId: 'x_saa', due: 'On the day', done: false },
+      { id: 'k11', task: 'Record attendance and guest details', ownerId: 'x_sec', due: 'On the day', done: false },
+      { id: 'k12', task: 'Prepare award ribbons or e-certificates', ownerId: 'x_pres', due: 'On the day', done: false }
+    ];
+
+    // Extra attendees (role players are added automatically from the line-up).
+    const DEFAULT_PEOPLE = [];
+
+    const DEFAULTS = { meeting: DEFAULT_MEETING, roles: DEFAULT_ROLES, agenda: DEFAULT_AGENDA, links: DEFAULT_LINKS, timerRules: DEFAULT_TIMER_RULES,
+      exco: DEFAULT_EXCO, tasks: DEFAULT_TASKS, people: DEFAULT_PEOPLE };
+
+    // ================= 2. ORGANIZER ACCESS =================
+    // The organizer button shows only with ?organizer=<ADMIN_LINK_KEY>; it then asks for ADMIN_PASSCODE.
+    // This is a static page, so this only deters casual visitors. Publishing still needs GitHub access.
+    const ADMIN_LINK_KEY = 'owagenda2026';
+    const ADMIN_PASSCODE = '258013';
+
+    // ================= 3. DATA: published (data.json) + organizer draft (this browser) =================
+    const store = {
+      get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+      set(k, v) { try { localStorage.setItem(k, v); return true; } catch (e) { showToast('Could not save: browser storage is blocked or full.'); return false; } },
+      remove(k) { try { localStorage.removeItem(k); } catch (e) {} }
+    };
+    const DRAFT_KEY = 'owclub_draft_v1';
+    const clone = o => JSON.parse(JSON.stringify(o));
+    function safeParse(str, fb) { try { return str ? JSON.parse(str) : fb; } catch (e) { return fb; } }
+    function normalise(d) {
+      const out = clone(DEFAULTS);
+      if (d && typeof d === 'object') {
+        Object.keys(DEFAULTS).forEach(k => {
+          if (k === 'meeting') out.meeting = { ...out.meeting, ...(d.meeting || {}) };
+          else if (Array.isArray(d[k])) out[k] = d[k];
+        });
+        if (d.updatedAt) out.updatedAt = d.updatedAt;
+      }
+      return out;
+    }
+    let PUBLISHED = normalise(null);
+    let isAdminMode = false;
+    let draftCache = null;
+    function loadDraft() { draftCache = safeParse(store.get(DRAFT_KEY), null); }
+    function data() { return isAdminMode && draftCache ? draftCache : PUBLISHED; }
+    const getMeeting = () => ({ ...data().meeting });
+    const getRoles = () => data().roles;
+    const getAgenda = () => data().agenda;
+    const getLinks = () => data().links;
+    const getTimerRules = () => data().timerRules;
+    const getExco = () => data().exco;
+    const getTasks = () => data().tasks;
+    const getPeople = () => data().people;
+    function saveSection(name, value) {
+      const d = clone(data());
+      d[name] = value;
+      d.updatedAt = new Date().toISOString();
+      if (store.set(DRAFT_KEY, JSON.stringify(d))) draftCache = normalise(d);
+      renderAll();
+    }
+
+    async function loadPublished() {
+      try {
+        const res = await fetch('data.json', { cache: 'no-cache' });
+        if (!res.ok) return;
+        const d = await res.json();
+        PUBLISHED = normalise(d);
+        renderAll();
+      } catch (e) { /* no data.json yet (or opened from disk): keep built-in defaults */ }
+    }
+
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const safeUrl = u => /^(https?:|mailto:|tel:)/i.test(String(u || '').trim()) ? String(u).trim() : '#';
+    const safeImg = u => /^(data:image\/|assets\/|https:)/i.test(String(u || '')) ? String(u) : '';
+    const filled = name => !!String(name || '').trim() && !/^tba$/i.test(String(name).trim());
+
+    let currentFilter = 'all';
+    let currentView = 'table';
+    let peopleFilter = 'all';
+
+    // ================= 4. TIME HELPERS (Malaysia time, UTC+8) =================
+    function parseClock(str) {
+      const m = String(str || '').trim().match(/^(\d{1,2})[:.](\d{2})\s*([ap]\.?m\.?)?$/i);
+      if (!m) return null;
+      let h = Number(m[1]); const min = Number(m[2]);
+      const ap = m[3] ? m[3][0].toLowerCase() : null;
+      if (ap === 'p' && h < 12) h += 12;
+      if (ap === 'a' && h === 12) h = 0;
+      if (h > 23 || min > 59) return null;
+      return h * 60 + min;
+    }
+    function fmtClock(total) {
+      total = ((total % 1440) + 1440) % 1440;
+      const h = Math.floor(total / 60), m = total % 60;
+      return `${(h % 12) || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`;
+    }
+    function meetingStartMs(mt) { return new Date(`${mt.date}T${mt.start}:00+08:00`).getTime(); }
+    function meetingEndMs(mt) { let e = new Date(`${mt.date}T${mt.end}:00+08:00`).getTime(); if (e <= meetingStartMs(mt)) e += 86400000; return e; }
+    function fmtDate(mt, style) {
+      const d = new Date(`${mt.date}T12:00:00+08:00`);
+      if (isNaN(d)) return mt.date;
+      const opts = style === 'short' ? { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'Asia/Kuala_Lumpur' }
+        : { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Asia/Kuala_Lumpur' };
+      return d.toLocaleDateString('en-GB', opts);
+    }
+    const timeRange = mt => `${fmtClock(parseClock(mt.start))} – ${fmtClock(parseClock(mt.end))} (MYT)`;
+    function currentItemId(items, mt) {
+      const now = Date.now();
+      const dayStart = new Date(`${mt.date}T00:00:00+08:00`).getTime();
+      if (isNaN(dayStart) || now < meetingStartMs(mt) - 5 * 60000 || now > meetingEndMs(mt) + 15 * 60000) return null;
+      const nowMin = (now - dayStart) / 60000;
+      for (const it of items) {
+        if (it.banner) continue;
+        const f = parseClock(it.from), t = parseClock(it.to);
+        if (f != null && t != null && nowMin >= f && nowMin < t + 1) return it.id;
+      }
+      return null;
+    }
+
+    // ================= 5. SHARED UI HELPERS =================
+    const PHOTO_DEFAULTS = { x: 50, y: 25, zoom: 100 };
+    function photoFraming(item) {
+      const n = (v, d) => (v === undefined || v === null || v === '' || isNaN(Number(v))) ? d : Number(v);
+      return { x: n(item && item.photoX, PHOTO_DEFAULTS.x), y: n(item && item.photoY, PHOTO_DEFAULTS.y), zoom: n(item && item.photoZoom, PHOTO_DEFAULTS.zoom) };
+    }
+    function photoStyle(item) { const f = photoFraming(item); return `object-position:${f.x}% ${f.y}%;transform:scale(${f.zoom / 100});transform-origin:${f.x}% ${f.y}%;`; }
+    const initials = name => (String(name || '').replace(/,.*$/, '').trim().split(/\s+/).filter(Boolean).map(w => w[0]).join('').slice(0, 2).toUpperCase()) || '';
+    const AV_COLORS = ['bg-tmNavy text-white', 'bg-tmMaroon text-white', 'bg-tmGold text-tmNavy-dark', 'bg-slate-500 text-white'];
+    function avColor(seed) { let h = 0; String(seed || '').split('').forEach(c => { h = (h * 31 + c.charCodeAt(0)) >>> 0; }); return AV_COLORS[h % AV_COLORS.length]; }
+    // Avatar: photo if present, otherwise initials (or a person icon when the slot is open)
+    function avatar(p, sizeCls, shapeCls, textCls) {
+      const src = safeImg(p.photo);
+      if (src) return `<div class="${sizeCls} ${shapeCls} overflow-hidden bg-slate-100 flex-shrink-0"><img src="${esc(src)}" alt="${esc(p.name)}" class="w-full h-full object-cover" style="${photoStyle(p)}" loading="lazy" /></div>`;
+      if (!filled(p.name)) return `<div class="${sizeCls} ${shapeCls} bg-slate-100 border-2 border-dashed border-slate-300 text-slate-400 flex items-center justify-center flex-shrink-0 ${textCls}"><i class="fas fa-user"></i></div>`;
+      return `<div class="${sizeCls} ${shapeCls} ${avColor(p.name)} flex items-center justify-center font-heading font-extrabold flex-shrink-0 ${textCls}">${esc(initials(p.name))}</div>`;
+    }
+    function adminButtons(id, kind, small) {
+      const cls = small ? 'p-1' : 'p-2 bg-slate-100 hover:bg-slate-200 rounded-lg';
+      return `<div class="flex items-center justify-center gap-1">
+        <button onclick="moveItem('${kind}','${id}',-1)" class="${cls} text-slate-500 hover:text-tmNavy" title="Move up" aria-label="Move up"><i class="fas fa-arrow-up"></i></button>
+        <button onclick="moveItem('${kind}','${id}',1)" class="${cls} text-slate-500 hover:text-tmNavy" title="Move down" aria-label="Move down"><i class="fas fa-arrow-down"></i></button>
+        <button onclick="editItem('${kind}','${id}')" class="${cls} text-tmNavy hover:text-tmMaroon" title="Edit" aria-label="Edit"><i class="fas fa-edit"></i></button>
+        <button onclick="deleteItem('${kind}','${id}')" class="${cls} text-rose-600 hover:text-rose-800" title="Delete" aria-label="Delete"><i class="fas fa-trash-alt"></i></button>
+      </div>`;
+    }
+
+    // ================= 6. AGENDA =================
+    function roleById(id) { return getRoles().find(r => r.id === id) || null; }
+    function displayRole(item) {
+      if (item.roleId) { const r = roleById(item.roleId); if (r) return filled(r.name) ? r.name : 'Open role'; }
+      return item.rolePlayer || '';
+    }
+    function displayDetails(item) {
+      const parts = [];
+      const r = item.roleId ? roleById(item.roleId) : null;
+      if (r && r.group === 'speakers') { if (r.speech) parts.push(`“${r.speech}”`); if (r.project) parts.push(r.project); if (r.time) parts.push(r.time); }
+      if (item.details) parts.push(item.details);
+      return parts.join(' • ');
+    }
+    const visible = item => currentFilter === 'all' || item.banner || item.category === currentFilter;
+
+    function renderAgendaTable() {
+      const items = getAgenda(), mt = getMeeting(), nowId = currentItemId(items, mt);
+      const list = items.filter(visible), rows = [];
+      list.forEach((item, i) => {
+        if (item.banner) {
+          const next = list[i + 1];
+          if (currentFilter !== 'all' && (!next || next.banner)) return;
+          rows.push(`<tr class="bg-tmGray-light"><td colspan="8" class="py-2 px-4 font-heading font-extrabold uppercase tracking-[.14em] text-[11px] text-tmMaroon">${esc(item.program)}</td>
+            ${isAdminMode ? `<td class="py-1 px-2">${adminButtons(item.id, 'agenda', true)}</td>` : ''}</tr>`);
+          return;
+        }
+        const details = displayDetails(item), now = item.id === nowId, who = displayRole(item);
+        rows.push(`<tr class="${now ? 'now-row' : 'hover:bg-slate-50'}">
+          <td class="py-3 px-3 text-center font-bold text-slate-800 whitespace-nowrap">${esc(item.from)}</td>
+          <td class="py-3 px-3 text-center text-slate-500 whitespace-nowrap">${esc(item.to)}</td>
+          <td class="py-3 px-2 text-center font-semibold text-slate-700">${esc(item.mins)}</td>
+          <td class="py-3 px-2 text-center font-bold text-emerald-700">${esc(item.g)}</td>
+          <td class="py-3 px-2 text-center font-bold text-amber-700">${esc(item.y)}</td>
+          <td class="py-3 px-2 text-center font-bold text-rose-700">${esc(item.r)}</td>
+          <td class="py-3 px-4 font-semibold text-slate-900 leading-snug">${now ? '<span class="inline-block mr-1.5 px-1.5 py-0.5 rounded bg-tmMaroon text-white text-[9px] font-black uppercase align-middle">Now</span>' : ''}${esc(item.program)}
+            ${details ? `<div class="text-[11px] text-slate-500 mt-0.5 font-normal">${esc(details)}</div>` : ''}</td>
+          <td class="py-3 px-4 font-semibold ${who === 'Open role' ? 'text-rose-600' : 'text-slate-700'}">${esc(who)}</td>
+          ${isAdminMode ? `<td class="py-1 px-2">${adminButtons(item.id, 'agenda', true)}</td>` : ''}
+        </tr>`);
+      });
+      document.getElementById('agendaTableBody').innerHTML = rows.join('') || `<tr><td colspan="9" class="py-6 text-center text-slate-500">No segments in this view.</td></tr>`;
+    }
+    const CAT = {
+      general: { bar: 'bg-tmGray', label: 'General' }, topics: { bar: 'bg-tmGold-dark', label: 'Table Topics' },
+      speeches: { bar: 'bg-tmMaroon', label: 'Speech' }, evaluation: { bar: 'bg-tmNavy', label: 'Evaluation' }
+    };
+    function renderAgendaCards() {
+      const items = getAgenda(), mt = getMeeting(), nowId = currentItemId(items, mt);
+      const list = items.filter(visible);
+      document.getElementById('agendaCardsView').innerHTML = list.map((item, i) => {
+        if (item.banner) {
+          const next = list[i + 1];
+          if (currentFilter !== 'all' && (!next || next.banner)) return '';
+          return `<div class="flex items-center gap-2 pt-4 pb-1"><span class="font-heading font-extrabold uppercase tracking-[.14em] text-[11px] text-tmMaroon">${esc(item.program)}</span><span class="h-px flex-1 bg-slate-200"></span>${isAdminMode ? adminButtons(item.id, 'agenda', true) : ''}</div>`;
+        }
+        const st = CAT[item.category] || CAT.general, details = displayDetails(item), now = item.id === nowId, who = displayRole(item);
+        return `<div class="relative bg-white rounded-xl border border-slate-200 pl-4 pr-3 py-3 overflow-hidden ${now ? 'now-row' : ''}">
+          <span class="absolute left-0 top-0 bottom-0 w-1 ${st.bar}"></span>
+          <div class="flex items-start gap-3">
+            <div class="w-16 flex-shrink-0 text-center"><div class="text-xs font-extrabold text-slate-800 whitespace-nowrap">${esc(item.from)}</div>${item.mins ? `<div class="text-[10px] text-slate-500">${esc(item.mins)} min</div>` : ''}</div>
+            <div class="min-w-0 flex-1">
+              <div class="font-heading font-bold text-sm text-slate-900 leading-snug">${now ? '<span class="mr-1 px-1.5 py-0.5 rounded bg-tmMaroon text-white text-[9px] font-black uppercase align-middle">Now</span>' : ''}${esc(item.program)}</div>
+              ${details ? `<p class="text-xs text-slate-500 mt-0.5">${esc(details)}</p>` : ''}
+              <div class="flex flex-wrap items-center justify-between gap-2 mt-1.5">
+                <span class="text-xs font-semibold ${who === 'Open role' ? 'text-rose-600' : 'text-tmNavy'}">${esc(who || '—')}</span>
+                ${(item.g || item.y || item.r) ? `<span class="flex items-center gap-1 text-[10px] font-bold"><span class="px-1.5 rounded bg-emerald-100 text-emerald-900">${esc(item.g || '–')}</span><span class="px-1.5 rounded bg-amber-100 text-amber-900">${esc(item.y || '–')}</span><span class="px-1.5 rounded bg-rose-100 text-rose-900">${esc(item.r || '–')}</span></span>` : ''}
+              </div>
+            </div>
+          </div>
+          ${isAdminMode ? `<div class="mt-2 pt-2 border-t border-slate-100">${adminButtons(item.id, 'agenda', false)}</div>` : ''}
+        </div>`;
+      }).join('') || '<p class="text-center text-slate-500 text-sm py-6">No segments in this view.</p>';
+    }
+    function filterAgenda(cat) {
+      currentFilter = cat;
+      document.querySelectorAll('.agenda-tab').forEach(tab => {
+        const on = tab.id === 'tab-' + cat;
+        tab.className = `agenda-tab px-3.5 py-2 rounded-lg font-heading text-xs font-bold transition whitespace-nowrap ${on ? 'bg-white text-tmNavy shadow-sm' : 'text-slate-500 hover:text-slate-800'}`;
+        tab.setAttribute('aria-selected', String(on));
+      });
+      renderAgendaTable(); renderAgendaCards();
+    }
+    function setAgendaView(view) {
+      currentView = view;
+      document.getElementById('agendaTableView').classList.toggle('hidden', view !== 'table');
+      document.getElementById('agendaCardsView').classList.toggle('hidden', view !== 'cards');
+      [['viewBtnTable', 'table'], ['viewBtnCard', 'cards']].forEach(([id, v]) => {
+        document.getElementById(id).className = `view-btn px-3.5 py-2 rounded-lg transition ${view === v ? 'bg-white text-tmNavy shadow-sm font-bold' : 'text-slate-500 hover:text-slate-800'}`;
+      });
+    }
+
+    // ================= 7. LINE-UP =================
+    const GROUPS = [
+      { key: 'leaders', label: 'Meeting Leaders' }, { key: 'speakers', label: 'Prepared Speakers' },
+      { key: 'evaluators', label: 'Evaluators' }, { key: 'functionaries', label: 'Functionaries' }
+    ];
+    function renderRoles() {
+      const roles = getRoles();
+      document.getElementById('rolesContainer').innerHTML = GROUPS.map(g => {
+        const list = roles.filter(r => (r.group || 'leaders') === g.key);
+        if (!list.length) return '';
+        const speakers = g.key === 'speakers';
+        const cards = list.map(r => {
+          const open = !filled(r.name);
+          return `<div class="bg-white rounded-2xl border ${open ? 'border-dashed border-rose-300' : 'border-slate-200'} p-4 sm:p-5 flex ${speakers ? 'flex-col sm:flex-row sm:items-start' : 'flex-col items-center text-center'} gap-3 sm:gap-4 min-w-0">
+            ${avatar(r, speakers ? 'w-20 h-20' : 'w-20 h-20 sm:w-24 sm:h-24', 'rounded-full', 'text-xl')}
+            <div class="min-w-0 flex-1">
+              <div class="text-[10px] sm:text-[11px] font-heading font-bold uppercase tracking-wider text-tmMaroon">${esc(r.title)}</div>
+              <div class="font-heading font-bold text-sm sm:text-base ${open ? 'text-rose-600' : 'text-slate-900'} mt-0.5 break-words">${open ? 'Open role' : esc(r.name)}</div>
+              ${speakers && r.speech ? `<div class="font-heading font-semibold text-tmNavy text-sm mt-2 leading-snug">“${esc(r.speech)}”</div>` : ''}
+              ${speakers && (r.project || r.time) ? `<div class="text-xs text-slate-500 mt-0.5">${esc([r.project, r.time].filter(Boolean).join(' • '))}</div>` : ''}
+              ${!speakers && r.desc ? `<p class="hidden sm:block text-xs text-slate-500 mt-1 leading-relaxed">${esc(r.desc)}</p>` : ''}
+              ${isAdminMode ? `<div class="mt-3 pt-2 border-t border-slate-100">${adminButtons(r.id, 'role', true)}</div>` : ''}
+            </div>
+          </div>`;
+        }).join('');
+        return `<div>
+          <h3 class="font-heading font-bold text-sm text-slate-500 mb-3">${g.label}</h3>
+          <div class="grid ${speakers ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-2 lg:grid-cols-4'} gap-3 sm:gap-4">${cards}</div>
+        </div>`;
+      }).join('');
+    }
+
+    // ================= 8. MEETING PREP: tasks + attendance =================
+    function excoById(id) { return getExco().find(x => x.id === id) || null; }
+    function taskOwner(t) {
+      const x = t.ownerId ? excoById(t.ownerId) : null;
+      if (x) return { label: x.title, name: filled(x.name) ? x.name : '', person: x };
+      return { label: '', name: t.owner || 'Unassigned', person: { name: t.owner || '' } };
+    }
+    function renderTasks() {
+      const tasks = getTasks(), done = tasks.filter(t => t.done).length;
+      document.getElementById('statTasks').innerText = `${done}/${tasks.length}`;
+      document.getElementById('taskProgress').style.width = tasks.length ? `${Math.round(done / tasks.length * 100)}%` : '0%';
+      document.getElementById('taskList').innerHTML = tasks.map(t => {
+        const o = taskOwner(t);
+        const check = isAdminMode
+          ? `<button onclick="toggleTask('${t.id}')" class="w-6 h-6 rounded-md border-2 flex items-center justify-center flex-shrink-0 ${t.done ? 'bg-[#15803D] border-[#15803D] text-white' : 'border-slate-300 hover:border-[#15803D]'}" aria-label="Mark ${t.done ? 'not done' : 'done'}" title="Tick when done">${t.done ? '<i class="fas fa-check text-[11px]"></i>' : ''}</button>`
+          : `<span class="w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0 ${t.done ? 'bg-[#15803D] text-white' : 'border-2 border-slate-300'}">${t.done ? '<i class="fas fa-check text-[11px]"></i>' : ''}</span>`;
+        return `<li class="flex items-start gap-3 px-3 py-3">
+          ${check}
+          <div class="min-w-0 flex-1">
+            <div class="text-sm font-semibold ${t.done ? 'text-slate-400 line-through' : 'text-slate-900'}">${esc(t.task)}</div>
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-1 text-xs text-slate-500">
+              <span class="flex items-center gap-1.5">${avatar(o.person, 'w-5 h-5', 'rounded-full', 'text-[8px]')}<span><span class="font-bold text-slate-700">${esc(o.label)}</span>${o.label && o.name ? ' • ' : ''}${esc(o.name)}</span></span>
+              ${t.due ? `<span><i class="far fa-clock mr-0.5"></i>${esc(t.due)}</span>` : ''}
+            </div>
+          </div>
+          ${isAdminMode ? `<div class="flex-shrink-0">${adminButtons(t.id, 'task', true)}</div>` : ''}
+        </li>`;
+      }).join('') || '<li class="px-3 py-6 text-center text-sm text-slate-500">No tasks yet.</li>';
+    }
+    function toggleTask(id) {
+      const list = clone(getTasks()); const t = list.find(x => x.id === id);
+      if (t) { t.done = !t.done; saveSection('tasks', list); }
+    }
+
+    // Everyone attending: role players (from line-up, de-duplicated) + extra members/guests
+    function attendees() {
+      const map = new Map();
+      getRoles().forEach(r => {
+        if (!filled(r.name)) return;
+        const key = r.name.trim().toLowerCase();
+        if (!map.has(key)) map.set(key, { id: 'role:' + r.id, name: r.name, type: 'role', roles: [], photo: r.photo, photoX: r.photoX, photoY: r.photoY, photoZoom: r.photoZoom, auto: true });
+        map.get(key).roles.push(r.title);
+      });
+      const list = [...map.values()];
+      getPeople().forEach(p => list.push({ ...p, roles: [] }));
+      return list;
+    }
+    function renderPeople() {
+      const all = attendees();
+      const n = t => all.filter(p => p.type === t).length;
+      const venue = all.filter(p => !p.auto && p.mode === 'venue').length, zoom = all.filter(p => !p.auto && p.mode === 'zoom').length;
+      document.getElementById('statPeople').innerText = all.length;
+      document.getElementById('attendSummary').innerText = `${n('role')} role players • ${n('member')} members • ${n('guest')} guests`;
+      ['all', 'role', 'member', 'guest'].forEach(f => {
+        document.getElementById('pf-' + f).className = `pf-btn flex-1 px-2 py-1.5 rounded-lg transition ${peopleFilter === f ? 'bg-white text-tmMaroon shadow-sm' : 'text-slate-500 hover:text-slate-800'}`;
+      });
+      const shown = all.filter(p => peopleFilter === 'all' || p.type === peopleFilter);
+      const TYPE = { role: ['Role player', 'bg-tmNavy/10 text-tmNavy'], member: ['Member', 'bg-slate-100 text-slate-700'], guest: ['Guest', 'bg-tmGold/60 text-tmNavy-dark'] };
+      let hiddenGuests = 0;
+      const rows = shown.map(p => {
+        if (p.type === 'guest' && !isAdminMode) { hiddenGuests++; return ''; }
+        const [tl, tc] = TYPE[p.type] || TYPE.member;
+        const sub = p.auto ? p.roles.join(', ') : [p.mode === 'zoom' ? 'On Zoom' : p.mode === 'venue' ? 'At the venue' : '', p.note].filter(Boolean).join(' • ');
+        return `<li class="flex items-center gap-3 px-4 py-2.5">
+          ${avatar(p, 'w-9 h-9', 'rounded-full', 'text-xs')}
+          <div class="min-w-0 flex-1"><div class="text-sm font-semibold text-slate-900 truncate">${esc(p.name)}</div>${sub ? `<div class="text-[11px] text-slate-500 truncate">${esc(sub)}</div>` : ''}</div>
+          <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${tc} flex-shrink-0">${tl}</span>
+          ${isAdminMode && !p.auto ? `<div class="flex-shrink-0">${adminButtons(p.id, 'person', true)}</div>` : ''}
+        </li>`;
+      }).join('');
+      const guestRow = hiddenGuests ? `<li class="flex items-center gap-3 px-4 py-3 bg-tmGold/15"><span class="w-9 h-9 rounded-full bg-tmGold text-tmNavy-dark flex items-center justify-center"><i class="fas fa-user-friends text-xs"></i></span><div class="text-sm font-semibold text-slate-800">${hiddenGuests} guest${hiddenGuests > 1 ? 's' : ''} joining. Welcome!</div></li>` : '';
+      document.getElementById('peopleList').innerHTML = rows + guestRow || '<li class="px-4 py-6 text-center text-sm text-slate-500">No one listed yet.</li>';
+    }
+    function setPeopleFilter(f) { peopleFilter = f; renderPeople(); }
+
+    // ================= 9. EXCO =================
+    function renderExco() {
+      document.getElementById('excoContainer').innerHTML = getExco().map(x => {
+        const has = filled(x.name);
+        return `<div class="group bg-white rounded-2xl border border-slate-200 overflow-hidden flex flex-col">
+          <div class="relative aspect-square bg-tmGray-light overflow-hidden">
+            ${safeImg(x.photo)
+              ? `<img src="${esc(safeImg(x.photo))}" alt="${esc(x.name)}" class="w-full h-full object-cover" style="${photoStyle(x)}" loading="lazy" />`
+              : `<div class="w-full h-full flex items-center justify-center ${has ? avColor(x.name) : 'bg-slate-100 text-slate-300'} font-heading font-extrabold text-4xl sm:text-5xl">${has ? esc(initials(x.name)) : '<i class="fas fa-user"></i>'}</div>`}
+            <span class="absolute left-3 bottom-3 bg-white/95 text-tmMaroon text-[10px] sm:text-[11px] font-heading font-bold uppercase tracking-wider px-2 py-1 rounded-md shadow">${esc(x.title)}</span>
+          </div>
+          <div class="p-4 flex-1 flex flex-col">
+            <div class="font-heading font-bold text-sm sm:text-base ${has ? 'text-slate-900' : 'text-slate-400'}">${has ? esc(x.name) : 'To be updated'}</div>
+            ${x.desc ? `<p class="text-xs text-slate-500 mt-1 leading-relaxed">${esc(x.desc)}</p>` : ''}
+            ${x.contact ? `<a href="${esc(safeUrl(x.contact))}" target="_blank" rel="noopener noreferrer" class="mt-2 text-xs font-bold text-tmNavy hover:text-tmMaroon"><i class="fas fa-comment-dots mr-1"></i>Contact</a>` : ''}
+            ${isAdminMode ? `<div class="mt-auto pt-3">${adminButtons(x.id, 'exco', true)}</div>` : ''}
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    // ================= 10. LINKS, TIMER, MEETING TEXT =================
+    function renderLinks() {
+      document.getElementById('linksContainer').innerHTML = getLinks().map(l => `<div>
+        <a href="${esc(safeUrl(l.url))}" target="_blank" rel="noopener noreferrer" class="group h-full flex items-center gap-3 p-4 rounded-xl bg-white border border-slate-200 hover:border-tmNavy/40 hover:shadow-sm transition">
+          <span class="w-10 h-10 rounded-lg bg-tmMaroon/10 text-tmMaroon flex items-center justify-center flex-shrink-0"><i class="${esc(l.icon || 'fas fa-link')}"></i></span>
+          <span class="min-w-0 flex-1"><span class="block font-heading font-bold text-sm text-slate-900 leading-snug">${esc(l.title)}</span>${l.desc ? `<span class="block text-xs text-slate-500 truncate">${esc(l.desc)}</span>` : ''}</span>
+          <i class="fas fa-arrow-right text-[10px] text-slate-400 group-hover:text-tmMaroon group-hover:translate-x-0.5 transition"></i>
+        </a>
+        ${isAdminMode ? `<div class="mt-1">${adminButtons(l.id, 'link', true)}</div>` : ''}
+      </div>`).join('');
+    }
+    function renderTimer() {
+      const mt = getMeeting();
+      document.getElementById('timerTableBody').innerHTML = getTimerRules().map(r => `<tr>
+        <td class="py-2.5 px-4 font-semibold text-slate-900">${esc(r.label)}</td>
+        <td class="py-2.5 px-2 text-center font-bold text-emerald-700">${esc(r.g)}</td>
+        <td class="py-2.5 px-2 text-center font-bold text-amber-700">${esc(r.y)}</td>
+        <td class="py-2.5 px-2 text-center font-bold text-rose-700">${esc(r.r)}</td>
+        ${isAdminMode ? `<td class="py-1 px-2">${adminButtons(r.id, 'timer', true)}</td>` : ''}
+      </tr>`).join('');
+      document.getElementById('timerNotesList').innerHTML = (mt.timerNotes || []).map(n => `<li>${esc(n)}</li>`).join('');
+      const timer = getRoles().find(r => r.id === 'timer') || getRoles().find(r => /timer/i.test(r.title));
+      document.getElementById('timerName').innerText = timer && filled(timer.name) ? timer.name : 'To be confirmed';
+    }
+    function renderMeeting() {
+      const mt = getMeeting();
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v == null ? '' : v; };
+      const href = (id, v) => { const el = document.getElementById(id); if (el) el.href = safeUrl(v); };
+      set('heroMeetingNo', mt.no); set('heroFormat', mt.format || 'Meeting');
+      set('heroDate', fmtDate(mt)); set('heroTime', timeRange(mt));
+      set('heroTheme', mt.theme || 'TBA'); set('heroWod', mt.wod || 'TBA'); set('heroWodSay', mt.wodSay || '');
+      set('statMeetings', `${mt.no}+`);
+      set('mtNo', mt.no); set('mtTheme', mt.theme || 'TBA'); set('mtDesc', mt.desc);
+      set('mtDate', fmtDate(mt)); set('mtTime', timeRange(mt)); set('mtVenue', mt.venueAddr);
+      set('zoomIdText', mt.zoomId || '—'); set('zoomPassText', mt.zoomPass || '—');
+      set('mtWod', mt.wod || 'TBA'); set('mtWodSay', mt.wodSay || ''); set('mtWodMeaning', mt.wodMeaning || '');
+      set('agendaTag', `Program agenda • Meeting #${mt.no} • ${fmtDate(mt, 'short')}`);
+      document.querySelectorAll('.mtNoInline').forEach(el => { el.innerText = mt.no; });
+      set('aboutSchedule', mt.schedule); set('visitSchedule', mt.schedule); set('visitVenue', mt.venueAddr);
+      set('visitContactText', mt.contactText || 'Contact us'); set('excoTerm', mt.term || '');
+      href('mtMap', mt.mapUrl); href('visitMap', mt.mapUrl); href('visitContactBtn', mt.contactUrl); href('rsvpLink', mt.contactUrl);
+      ['headerZoomBtn', 'heroZoomBtn', 'mtZoomBtn'].forEach(id => href(id, mt.zoomUrl));
+      document.title = `OneWorld Toastmasters Club • Meeting #${mt.no} • ${fmtDate(mt, 'short')}`;
+    }
+    function renderStats() {
+      const roles = getRoles();
+      document.getElementById('statRoles').innerText = `${roles.filter(r => filled(r.name)).length}/${roles.length}`;
+    }
+    function renderAll() {
+      renderMeeting(); renderLinks(); renderAgendaTable(); renderAgendaCards(); renderRoles(); renderTimer();
+      renderTasks(); renderPeople(); renderExco(); renderStats();
+      document.querySelectorAll('.admin-col').forEach(el => el.classList.toggle('hidden', !isAdminMode));
+      const ds = document.getElementById('draftState');
+      if (ds) ds.innerText = draftCache ? ` (unpublished changes, last edit ${new Date(draftCache.updatedAt || Date.now()).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })})` : ' (no changes yet)';
+    }
+
+    // ================= 11. ORGANIZER MODE =================
+    function checkOrganizerLink() {
+      if (new URLSearchParams(window.location.search).get('organizer') === ADMIN_LINK_KEY) {
+        const btn = document.getElementById('adminToggleBtn'); btn.classList.remove('hidden'); btn.classList.add('flex');
+      }
+    }
+    const ADMIN_IDS = ['adminModeBanner', 'adminAgendaControls', 'adminRoleControls', 'adminLinkControls', 'adminTimerControls', 'adminTaskControls', 'adminPeopleControls', 'adminExcoControls'];
+    function toggleAdminMode() {
+      if (!isAdminMode) {
+        const entered = prompt('Enter the organizer passcode to unlock editing:');
+        if (entered === null) return;
+        if (entered.trim() !== ADMIN_PASSCODE) { showToast('Incorrect passcode.'); return; }
+        loadDraft();
+      }
+      isAdminMode = !isAdminMode;
+      const btn = document.getElementById('adminToggleBtn');
+      btn.querySelector('i').className = isAdminMode ? 'fas fa-lock-open' : 'fas fa-lock';
+      document.getElementById('adminToggleText').innerText = isAdminMode ? 'Editing' : 'Organizer';
+      btn.classList.toggle('bg-amber-400', isAdminMode); btn.classList.toggle('bg-amber-50', !isAdminMode);
+      ADMIN_IDS.forEach(id => document.getElementById(id).classList.toggle('hidden', !isAdminMode));
+      renderAll();
+      showToast(isAdminMode ? 'Organizer mode on. Changes are saved as a draft in this browser.' : 'Organizer mode off. Showing the published page.');
+    }
+    const KIND = {
+      agenda: { key: 'agenda', edit: id => openAgendaModal(id) },
+      role: { key: 'roles', edit: id => openRoleModal(id) },
+      link: { key: 'links', edit: id => openLinkModal(id) },
+      timer: { key: 'timerRules', edit: id => openTimerModal(id) },
+      exco: { key: 'exco', edit: id => openExcoModal(id) },
+      task: { key: 'tasks', edit: id => openTaskModal(id) },
+      person: { key: 'people', edit: id => openPersonModal(id) }
+    };
+    function moveItem(kind, id, dir) {
+      const k = KIND[kind], list = clone(data()[k.key]);
+      const i = list.findIndex(x => x.id === id), j = i + dir;
+      if (i < 0 || j < 0 || j >= list.length) return;
+      [list[i], list[j]] = [list[j], list[i]];
+      saveSection(k.key, list);
+    }
+    function editItem(kind, id) { KIND[kind].edit(id); }
+    function deleteItem(kind, id) {
+      if (!confirm('Delete this item?')) return;
+      const k = KIND[kind];
+      saveSection(k.key, data()[k.key].filter(x => x.id !== id));
+      if (kind === 'role') { const ag = clone(getAgenda()); ag.forEach(a => { if (a.roleId === id) a.roleId = ''; }); saveSection('agenda', ag); }
+      if (kind === 'exco') { const tk = clone(getTasks()); tk.forEach(t => { if (t.ownerId === id) t.ownerId = ''; }); saveSection('tasks', tk); }
+      showToast('Deleted.');
+    }
+    function upsert(key, item) {
+      const list = clone(data()[key]);
+      const i = list.findIndex(x => x.id === item.id);
+      if (i >= 0) list[i] = { ...list[i], ...item }; else list.push(item);
+      saveSection(key, list);
+    }
+    const val = id => document.getElementById(id).value;
+    const setVal = (id, v) => { document.getElementById(id).value = v == null ? '' : v; };
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden')); });
+
+    // --- Photo picker with framing (shared by role players and exco) ---
+    function photoBlockHtml(p) {
+      return `<input type="hidden" id="${p}PhotoData" />
+        <div class="flex items-center gap-3">
+          <div id="${p}PhotoFrame" class="w-24 h-24 rounded-full overflow-hidden border border-slate-200 bg-slate-100 flex-shrink-0 hidden"><img id="${p}PhotoPreview" alt="Photo preview" class="w-full h-full object-cover" /></div>
+          <div class="flex-1">
+            <label for="${p}PhotoInput" class="block font-bold text-slate-600 mb-1">Photo (optional)</label>
+            <input type="file" accept="image/*" id="${p}PhotoInput" onchange="handlePhotoFileSelect(this,'${p}')" class="w-full text-[11px]" />
+            <button type="button" onclick="clearPhoto('${p}')" class="text-[10px] text-rose-600 font-bold mt-1">Remove photo</button>
+          </div>
+        </div>
+        <div id="${p}PhotoAdjust" class="hidden mt-3 p-3 bg-slate-50 border border-slate-200 rounded-xl space-y-2">
+          <div class="font-bold text-slate-700"><i class="fas fa-crop-alt text-tmNavy mr-1"></i> Frame the face</div>
+          <label class="flex items-center gap-2"><span class="w-20 text-slate-600 font-semibold">Up / Down</span><input type="range" id="${p}PhotoY" min="0" max="100" value="25" oninput="updatePhotoPreview('${p}')" class="flex-1 accent-[#004165]" /></label>
+          <label class="flex items-center gap-2"><span class="w-20 text-slate-600 font-semibold">Left / Right</span><input type="range" id="${p}PhotoX" min="0" max="100" value="50" oninput="updatePhotoPreview('${p}')" class="flex-1 accent-[#004165]" /></label>
+          <label class="flex items-center gap-2"><span class="w-20 text-slate-600 font-semibold">Zoom</span><input type="range" id="${p}PhotoZoom" min="100" max="250" value="100" oninput="updatePhotoPreview('${p}')" class="flex-1 accent-[#004165]" /></label>
+          <button type="button" onclick="setPhotoFramingInputs('${p}', {})" class="text-[10px] font-bold text-tmNavy">Reset framing</button>
+        </div>`;
+    }
+    document.querySelectorAll('[data-photo-block]').forEach(el => { el.innerHTML = photoBlockHtml(el.dataset.photoBlock); });
+    function setPhotoFramingInputs(p, item) {
+      const f = photoFraming(item);
+      setVal(p + 'PhotoX', f.x); setVal(p + 'PhotoY', f.y); setVal(p + 'PhotoZoom', f.zoom);
+      updatePhotoPreview(p);
+    }
+    function readPhotoFraming(p) { return { photoX: Number(val(p + 'PhotoX')), photoY: Number(val(p + 'PhotoY')), photoZoom: Number(val(p + 'PhotoZoom')) }; }
+    function updatePhotoPreview(p) { document.getElementById(p + 'PhotoPreview').setAttribute('style', photoStyle(readPhotoFraming(p))); }
+    function showPhotoEditor(p, show) {
+      document.getElementById(p + 'PhotoFrame').classList.toggle('hidden', !show);
+      document.getElementById(p + 'PhotoAdjust').classList.toggle('hidden', !show);
+    }
+    function loadPhotoFields(p, item) {
+      setVal(p + 'PhotoData', item.photo || ''); setVal(p + 'PhotoInput', '');
+      const img = document.getElementById(p + 'PhotoPreview');
+      if (safeImg(item.photo)) img.src = item.photo; else img.removeAttribute('src');
+      showPhotoEditor(p, !!safeImg(item.photo)); setPhotoFramingInputs(p, item);
+    }
+    function handlePhotoFileSelect(input, p) {
+      const file = input.files && input.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) { showToast('Please choose an image file.'); input.value = ''; return; }
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const img = new Image();
+        img.onload = () => {
+          const maxDim = 500; let w = img.width, h = img.height;
+          if (w > h && w > maxDim) { h = Math.round(h * maxDim / w); w = maxDim; } else if (h > maxDim) { w = Math.round(w * maxDim / h); h = maxDim; }
+          const c = document.createElement('canvas'); c.width = w; c.height = h;
+          c.getContext('2d').drawImage(img, 0, 0, w, h);
+          const out = c.toDataURL('image/jpeg', 0.82);
+          setVal(p + 'PhotoData', out);
+          document.getElementById(p + 'PhotoPreview').src = out;
+          showPhotoEditor(p, true); setPhotoFramingInputs(p, {});
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+    function clearPhoto(p) {
+      setVal(p + 'PhotoData', ''); setVal(p + 'PhotoInput', '');
+      document.getElementById(p + 'PhotoPreview').removeAttribute('src');
+      showPhotoEditor(p, false);
+    }
+
+    // --- Agenda modal ---
+    function openAgendaModal(id, asBanner) {
+      const item = id ? getAgenda().find(x => x.id === id) : null;
+      const banner = item ? !!item.banner : !!asBanner;
+      document.getElementById('agendaModalTitle').innerText = (item ? 'Edit ' : 'Add ') + (banner ? 'Section' : 'Segment');
+      document.getElementById('agProgramLabel').innerText = banner ? 'Section name' : 'Segment title';
+      document.getElementById('agNonBannerFields').classList.toggle('hidden', banner);
+      setVal('agId', item ? item.id : ''); setVal('agBanner', banner ? '1' : '');
+      document.getElementById('agRoleId').innerHTML = '<option value="">— none —</option>' + getRoles().map(r => `<option value="${esc(r.id)}">${esc(r.title)} (${esc(filled(r.name) ? r.name : 'open')})</option>`).join('');
+      const last = getAgenda().filter(x => !x.banner).slice(-1)[0];
+      const nextFrom = last && parseClock(last.to) != null ? fmtClock(parseClock(last.to) + 1) : fmtClock(parseClock(getMeeting().start));
+      const d = item || { from: nextFrom, mins: '5', g: '3', y: '4', r: '5', program: '', category: 'general', roleId: '', rolePlayer: '', details: '' };
+      setVal('agProgram', d.program); setVal('agFrom', d.from); setVal('agMins', d.mins); setVal('agTo', d.to);
+      setVal('agG', d.g); setVal('agY', d.y); setVal('agR', d.r); setVal('agCategory', d.category || 'general');
+      setVal('agRoleId', d.roleId || ''); setVal('agRolePlayer', d.rolePlayer); setVal('agDetails', d.details);
+      if (!item) autoTo();
+      openModal('agendaModal');
+    }
+    function autoTo() { const f = parseClock(val('agFrom')), m = Number(val('agMins')); if (f != null && !isNaN(m) && val('agMins') !== '') setVal('agTo', fmtClock(f + m)); }
+    document.getElementById('agFrom').addEventListener('input', autoTo);
+    document.getElementById('agMins').addEventListener('input', autoTo);
+    function normClock(s) { const c = parseClock(s); return c == null ? String(s || '').trim() : fmtClock(c); }
+    function saveAgendaItem(e) {
+      e.preventDefault();
+      const banner = val('agBanner') === '1';
+      const item = banner ? { id: val('agId') || 'b_' + Date.now(), banner: true, program: val('agProgram').trim() }
+        : { id: val('agId') || 'a_' + Date.now(), from: normClock(val('agFrom')), to: normClock(val('agTo')), mins: val('agMins'),
+            g: val('agG').trim(), y: val('agY').trim(), r: val('agR').trim(), program: val('agProgram').trim(), category: val('agCategory'),
+            roleId: val('agRoleId'), rolePlayer: val('agRolePlayer').trim(), details: val('agDetails').trim() };
+      upsert('agenda', item); closeModal('agendaModal'); showToast('Agenda updated.');
+    }
+
+    // --- Role modal ---
+    function openRoleModal(id) {
+      const r = id ? getRoles().find(x => x.id === id) : null;
+      document.getElementById('roleModalTitle').innerText = r ? 'Edit Role Player' : 'Add Role';
+      const d = r || { id: '', group: 'leaders', title: '', name: '', speech: '', project: '', time: '', desc: '', photo: '' };
+      setVal('roleId', d.id); setVal('roleGroup', d.group || 'leaders'); setVal('roleTitle', d.title); setVal('roleName', d.name);
+      setVal('roleSpeech', d.speech); setVal('roleProject', d.project); setVal('roleTime', d.time); setVal('roleDesc', d.desc);
+      loadPhotoFields('role', d); openModal('roleModal');
+    }
+    function saveRole(e) {
+      e.preventDefault();
+      upsert('roles', { id: val('roleId') || 'r_' + Date.now(), group: val('roleGroup'), title: val('roleTitle').trim(), name: val('roleName').trim(),
+        speech: val('roleSpeech').trim(), project: val('roleProject').trim(), time: val('roleTime').trim(), desc: val('roleDesc').trim(),
+        photo: val('rolePhotoData'), ...readPhotoFraming('role') });
+      closeModal('roleModal'); showToast('Role saved.');
+    }
+
+    // --- Exco modal ---
+    function openExcoModal(id) {
+      const x = id ? getExco().find(o => o.id === id) : null;
+      document.getElementById('excoModalTitle').innerText = x ? 'Edit Officer' : 'Add Officer';
+      const d = x || { id: '', title: '', name: '', desc: '', contact: '', photo: '' };
+      setVal('excoId', d.id); setVal('excoTitle', d.title); setVal('excoName', d.name); setVal('excoDesc', d.desc); setVal('excoContact', d.contact);
+      loadPhotoFields('exco', d); openModal('excoModal');
+    }
+    function saveExco(e) {
+      e.preventDefault();
+      upsert('exco', { id: val('excoId') || 'x_' + Date.now(), title: val('excoTitle').trim(), name: val('excoName').trim(), desc: val('excoDesc').trim(),
+        contact: val('excoContact').trim(), photo: val('excoPhotoData'), ...readPhotoFraming('exco') });
+      closeModal('excoModal'); showToast('Officer saved.');
+    }
+
+    // --- Task modal ---
+    function openTaskModal(id) {
+      const t = id ? getTasks().find(x => x.id === id) : null;
+      const d = t || { id: '', task: '', ownerId: '', owner: '', due: '', done: false };
+      document.getElementById('tkOwnerId').innerHTML = '<option value="">— other —</option>' + getExco().map(x => `<option value="${esc(x.id)}">${esc(x.title)}${filled(x.name) ? ' (' + esc(x.name) + ')' : ''}</option>`).join('');
+      setVal('tkId', d.id); setVal('tkTask', d.task); setVal('tkOwnerId', d.ownerId || ''); setVal('tkOwner', d.owner); setVal('tkDue', d.due);
+      document.getElementById('tkDone').checked = !!d.done;
+      openModal('taskModal');
+    }
+    function saveTask(e) {
+      e.preventDefault();
+      upsert('tasks', { id: val('tkId') || 'k_' + Date.now(), task: val('tkTask').trim(), ownerId: val('tkOwnerId'), owner: val('tkOwner').trim(), due: val('tkDue').trim(), done: document.getElementById('tkDone').checked });
+      closeModal('taskModal'); showToast('Task saved.');
+    }
+
+    // --- Attendee modal ---
+    function openPersonModal(id) {
+      const p = id ? getPeople().find(x => x.id === id) : null;
+      const d = p || { id: '', name: '', type: 'member', mode: 'venue', note: '' };
+      setVal('psId', d.id); setVal('psName', d.name); setVal('psType', d.type); setVal('psMode', d.mode); setVal('psNote', d.note);
+      openModal('personModal');
+    }
+    function savePerson(e) {
+      e.preventDefault();
+      upsert('people', { id: val('psId') || 'p_' + Date.now(), name: val('psName').trim(), type: val('psType'), mode: val('psMode'), note: val('psNote').trim() });
+      closeModal('personModal'); showToast('Attendee saved.');
+    }
+
+    // --- Meeting / link / timer modals ---
+    const MEETING_FIELDS = { mNo: 'no', mDate: 'date', mStart: 'start', mEnd: 'end', mFormat: 'format', mTheme: 'theme', mWod: 'wod', mWodSay: 'wodSay',
+      mWodMeaning: 'wodMeaning', mDesc: 'desc', mZoomUrl: 'zoomUrl', mZoomId: 'zoomId', mZoomPass: 'zoomPass', mVenueName: 'venueName',
+      mVenueAddr: 'venueAddr', mMapUrl: 'mapUrl', mSchedule: 'schedule', mContactUrl: 'contactUrl', mContactText: 'contactText', mTerm: 'term' };
+    function openMeetingModal() { const mt = getMeeting(); Object.entries(MEETING_FIELDS).forEach(([el, k]) => setVal(el, mt[k])); openModal('meetingModal'); }
+    function saveMeeting(e) {
+      e.preventDefault();
+      const mt = getMeeting();
+      Object.entries(MEETING_FIELDS).forEach(([el, k]) => { mt[k] = val(el).trim(); });
+      saveSection('meeting', mt); closeModal('meetingModal'); showToast('Meeting details saved.');
+    }
+    function openLinkModal(id) {
+      const l = id ? getLinks().find(x => x.id === id) : null;
+      const d = l || { id: '', title: '', desc: '', url: '', icon: 'fas fa-link' };
+      setVal('lkId', d.id); setVal('lkTitle', d.title); setVal('lkDesc', d.desc); setVal('lkUrl', d.url); setVal('lkIcon', d.icon);
+      openModal('linkModal');
+    }
+    function saveLink(e) {
+      e.preventDefault();
+      upsert('links', { id: val('lkId') || 'l_' + Date.now(), title: val('lkTitle').trim(), desc: val('lkDesc').trim(), url: val('lkUrl').trim(), icon: val('lkIcon') });
+      closeModal('linkModal'); showToast('Link saved.');
+    }
+    function openTimerModal(id) {
+      const r = id ? getTimerRules().find(x => x.id === id) : null;
+      const d = r || { id: '', label: '', g: '', y: '', r: '' };
+      setVal('trId', d.id); setVal('trLabel', d.label); setVal('trG', d.g); setVal('trY', d.y); setVal('trR', d.r);
+      openModal('timerModal');
+    }
+    function saveTimerRule(e) {
+      e.preventDefault();
+      upsert('timerRules', { id: val('trId') || 't_' + Date.now(), label: val('trLabel').trim(), g: val('trG').trim(), y: val('trY').trim(), r: val('trR').trim() });
+      closeModal('timerModal'); showToast('Timer rule saved.');
+    }
+    function openNotesModal() { setVal('notesText', (getMeeting().timerNotes || []).join('\n')); openModal('notesModal'); }
+    function saveNotes(e) {
+      e.preventDefault();
+      const mt = getMeeting(); mt.timerNotes = val('notesText').split('\n').map(s => s.trim()).filter(Boolean);
+      saveSection('meeting', mt); closeModal('notesModal'); showToast('Notes saved.');
+    }
+
+    // --- Publish / import / discard ---
+    function downloadBlob(blob, name) {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = name;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    }
+    function exportDataJson() {
+      const d = clone(data()); d.publishedAt = new Date().toISOString();
+      downloadBlob(new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' }), 'data.json');
+      showToast('data.json downloaded. Upload it to the GitHub repo to publish.');
+    }
+    function importDataJson(input) {
+      const file = input.files && input.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        const d = safeParse(reader.result, null); input.value = '';
+        if (!d || typeof d !== 'object') { showToast('That file is not valid JSON.'); return; }
+        const n = normalise(d); n.updatedAt = new Date().toISOString();
+        if (store.set(DRAFT_KEY, JSON.stringify(n))) draftCache = n;
+        renderAll(); showToast('Imported into your draft.');
+      };
+      reader.readAsText(file);
+    }
+    function discardDraft() {
+      if (!confirm('Discard your unpublished changes in this browser and go back to the published page?')) return;
+      store.remove(DRAFT_KEY); draftCache = null; renderAll(); showToast('Draft discarded.');
+    }
+
+    // ================= 12. EXCEL EXPORT =================
+    const EXCELJS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js';
+    const TM = { navy: 'FF004165', navyDark: 'FF006094', maroon: 'FF772432', fairGray: 'FFF5F5F5', bannerBlue: 'FFCCD9E0' };
+    function loadScriptOnce(src) {
+      return new Promise((resolve, reject) => {
+        if (window.ExcelJS) return resolve();
+        const s = document.createElement('script'); s.src = src; s.async = true;
+        s.onload = resolve; s.onerror = () => reject(new Error('Could not load Excel library'));
+        document.head.appendChild(s);
+      });
+    }
+    async function fetchImageAsDataUrl(path) {
+      try {
+        const res = await fetch(path, { cache: 'no-cache' });
+        if (!res.ok || !(res.headers.get('content-type') || '').startsWith('image/')) return null;
+        const blob = await res.blob();
+        return await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result); fr.onerror = () => r(null); fr.readAsDataURL(blob); });
+      } catch (e) { return null; }
+    }
+    const cleanCell = t => String(t == null ? '' : t).replace(/\r/g, '').trim();
+
+    async function buildWorkbook() {
+      await loadScriptOnce(EXCELJS_URL);
+      const mt = getMeeting(), items = getAgenda(), roles = getRoles(), rules = getTimerRules();
+      const wb = new ExcelJS.Workbook();
+      wb.creator = 'OneWorld Toastmasters Club'; wb.title = `Meeting #${mt.no} – Program Agenda`; wb.created = new Date();
+      const ws = wb.addWorksheet(`Meeting ${mt.no}`, {
+        properties: { defaultRowHeight: 18 }, views: [{ showGridLines: false }],
+        pageSetup: { paperSize: 9, orientation: 'landscape', horizontalCentered: true, margins: { left: 0.4, right: 0.4, top: 0.5, bottom: 0.6, header: 0.25, footer: 0.3 }, printTitlesRow: '8:9' },
+        headerFooter: { oddFooter: '&L&8OneWorld Toastmasters Club • Club No. 01589773&C&8Where Leaders Are Made&R&8Page &P of &N' }
+      });
+      ws.columns = [{ width: 8.5 }, { width: 8.5 }, { width: 6 }, { width: 5 }, { width: 5 }, { width: 5 }, { width: 50 }, { width: 23 }];
+      const FONT = 'Arial', HEAD = 'Montserrat';
+      const thin = { style: 'thin', color: { argb: 'FFCBD5E1' } };
+      const box = { top: thin, left: thin, bottom: thin, right: thin };
+      const fill = argb => ({ type: 'pattern', pattern: 'solid', fgColor: { argb } });
+      const center = { vertical: 'middle', horizontal: 'center', wrapText: true };
+      const left = { vertical: 'middle', horizontal: 'left', wrapText: true, indent: 1 };
+
+      [30, 22, 18, 18].forEach((h, i) => { ws.getRow(i + 1).height = h; });
+      ws.mergeCells('A1:B4'); ['C1:G1', 'C2:G2', 'C3:G3', 'C4:G4'].forEach(r => ws.mergeCells(r)); ws.mergeCells('H1:H4');
+      ws.getCell('C1').value = 'ONEWORLD TOASTMASTERS CLUB'; ws.getCell('C1').font = { name: HEAD, size: 16, bold: true, color: { argb: TM.navy } };
+      ws.getCell('C2').value = `Meeting #${mt.no} — Program Agenda`; ws.getCell('C2').font = { name: HEAD, size: 12, bold: true, color: { argb: TM.maroon } };
+      ws.getCell('C3').value = 'Club No. 01589773  •  Area W4  •  Division W  •  District 51'; ws.getCell('C3').font = { name: FONT, size: 9, color: { argb: 'FF475569' } };
+      ws.getCell('C4').value = `${fmtDate(mt)}  •  ${timeRange(mt)}  •  ${mt.format || ''}`; ws.getCell('C4').font = { name: FONT, size: 9, bold: true, color: { argb: 'FF1E293B' } };
+      ['C1', 'C2', 'C3', 'C4'].forEach(a => { ws.getCell(a).alignment = { vertical: 'middle', horizontal: 'center' }; });
+      const logo = await fetchImageAsDataUrl('assets/tm-logo.png');
+      if (logo) ws.addImage(wb.addImage({ base64: logo, extension: 'png' }), { tl: { col: 0.3, row: 0.2 }, ext: { width: 110, height: 91 }, editAs: 'oneCell' });
+      const h = ws.getCell('H1');
+      h.value = { richText: [{ text: 'WHERE LEADERS\nARE MADE', font: { name: HEAD, size: 10, bold: true, color: { argb: TM.maroon } } }] }; h.alignment = center;
+
+      ws.getRow(5).height = 5; for (let c = 1; c <= 8; c++) ws.getRow(5).getCell(c).fill = fill(TM.maroon);
+      ws.mergeCells('A6:H6'); ws.getRow(6).height = 22;
+      const sp = '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0';
+      const lab = t => ({ text: t + '\u00A0', font: { name: FONT, size: 10, bold: true, color: { argb: TM.navy } } });
+      const txt = t => ({ text: t + sp, font: { name: FONT, size: 10, color: { argb: 'FF1E293B' } } });
+      const r6 = ws.getCell('A6');
+      r6.value = { richText: [lab('Theme:'), txt(mt.theme || 'TBA'), lab('Word of the Day:'), txt(mt.wod || 'TBA'), lab('Zoom ID:'), txt(mt.zoomId || '—'), lab('Passcode:'), { text: mt.zoomPass || '—', font: { name: FONT, size: 10, color: { argb: 'FF1E293B' } } }] };
+      r6.alignment = { vertical: 'middle', horizontal: 'center' }; r6.fill = fill(TM.fairGray);
+      ws.getRow(7).height = 6;
+
+      ws.mergeCells('A8:C8'); ws.mergeCells('D8:F8');
+      const h8 = ws.getRow(8), h9 = ws.getRow(9); h8.height = 20; h9.height = 20;
+      h8.getCell(1).value = 'TIME'; h8.getCell(4).value = 'TIMING GUIDE'; h8.getCell(7).value = 'PROGRAM'; h8.getCell(8).value = 'ROLE PLAYER';
+      ['From', 'To', 'Mins', 'G', 'Y', 'R', 'Segment / Details', 'In-Charge'].forEach((v, i) => { h9.getCell(i + 1).value = v; });
+      for (let c = 1; c <= 8; c++) {
+        const a = h8.getCell(c), b = h9.getCell(c);
+        a.fill = fill(TM.navy); b.fill = fill(TM.navyDark);
+        a.font = b.font = { name: FONT, size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
+        a.alignment = b.alignment = c >= 7 ? left : center; a.border = b.border = box;
+      }
+      h9.getCell(4).fill = fill('FF15803D'); h9.getCell(5).fill = fill('FFD97706'); h9.getCell(6).fill = fill('FFBE123C');
+
+      let rowNo = 10;
+      const num = v => { const s = cleanCell(v); return s !== '' && !isNaN(Number(s)) ? Number(s) : s; };
+      items.forEach(item => {
+        const row = ws.getRow(rowNo);
+        if (item.banner) {
+          ws.mergeCells(`A${rowNo}:H${rowNo}`);
+          const cell = row.getCell(1);
+          cell.value = cleanCell(item.program).toUpperCase(); cell.font = { name: HEAD, size: 11, bold: true, color: { argb: TM.navy } };
+          cell.alignment = { vertical: 'middle', horizontal: 'center' }; cell.fill = fill(TM.bannerBlue);
+          cell.border = { top: { style: 'medium', color: { argb: TM.navy } }, bottom: { style: 'medium', color: { argb: TM.navy } }, left: thin, right: thin };
+          row.height = 22; rowNo++; return;
+        }
+        const program = cleanCell(item.program), details = cleanCell(displayDetails(item)), who = cleanCell(displayRole(item));
+        row.getCell(1).value = cleanCell(item.from); row.getCell(2).value = cleanCell(item.to);
+        row.getCell(3).value = num(item.mins); row.getCell(4).value = num(item.g); row.getCell(5).value = num(item.y); row.getCell(6).value = num(item.r);
+        row.getCell(8).value = who;
+        const parts = [{ text: program, font: { name: FONT, size: 10, bold: true, color: { argb: 'FF0F172A' } } }];
+        if (details) parts.push({ text: '\n' + details, font: { name: FONT, size: 9, italic: true, color: { argb: 'FF64748B' } } });
+        row.getCell(7).value = { richText: parts };
+        const lines = Math.max(1, Math.ceil(program.length / 56)) + (details ? Math.ceil(details.length / 68) : 0);
+        row.height = Math.max(22, Math.max(lines, Math.ceil(who.length / 24) || 1) * 14 + 8);
+        for (let c = 1; c <= 8; c++) { const cell = row.getCell(c); cell.border = box; cell.alignment = c >= 7 ? left : center; if (c !== 7) cell.font = { name: FONT, size: 10, color: { argb: 'FF1E293B' } }; }
+        row.getCell(1).font = { name: FONT, size: 10, bold: true, color: { argb: 'FF1E293B' } };
+        row.getCell(4).font = { name: FONT, size: 10, bold: true, color: { argb: 'FF166534' } };
+        row.getCell(5).font = { name: FONT, size: 10, bold: true, color: { argb: 'FF92400E' } };
+        row.getCell(6).font = { name: FONT, size: 10, bold: true, color: { argb: 'FF9F1239' } };
+        row.getCell(4).fill = fill('FFECFDF5'); row.getCell(5).fill = fill('FFFFFBEB'); row.getCell(6).fill = fill('FFFFF1F2');
+        if (item.category === 'speeches') [1, 2, 3, 7, 8].forEach(c => { row.getCell(c).fill = fill('FFFBF3D3'); });
+        rowNo++;
+      });
+
+      const sectionTitle = text => {
+        ws.mergeCells(`A${rowNo}:H${rowNo}`);
+        const cell = ws.getCell(`A${rowNo}`);
+        cell.value = text; cell.font = { name: HEAD, size: 10, bold: true, color: { argb: 'FFFFFFFF' } };
+        cell.fill = fill(TM.maroon); cell.alignment = { vertical: 'middle', horizontal: 'left', indent: 1 };
+        ws.getRow(rowNo).height = 20; rowNo++;
+      };
+      const infoRow = (label, value) => {
+        ws.mergeCells(`A${rowNo}:F${rowNo}`); ws.mergeCells(`G${rowNo}:H${rowNo}`);
+        const l = ws.getCell(`A${rowNo}`), v = ws.getCell(`G${rowNo}`);
+        l.value = label; v.value = value;
+        l.font = { name: FONT, size: 10, bold: true, color: { argb: 'FF0F172A' } }; v.font = { name: FONT, size: 10, color: { argb: 'FF1E293B' } };
+        l.fill = fill('FFF8FAFC'); l.alignment = left; v.alignment = left;
+        for (let c = 1; c <= 8; c++) ws.getRow(rowNo).getCell(c).border = box;
+        ws.getRow(rowNo).height = Math.max(20, Math.ceil(String(value).length / 70) * 14 + 6);
+        rowNo++;
+      };
+      rowNo += 1;
+      sectionTitle(`ROLE PLAYERS • MEETING #${mt.no}`);
+      roles.forEach(r => {
+        let v = filled(r.name) ? r.name : 'Open role';
+        if (r.group === 'speakers') v += [r.speech ? ` — “${r.speech}”` : '', r.project ? ` (${r.project}${r.time ? ', ' + r.time : ''})` : ''].join('');
+        infoRow(r.title, v);
+      });
+      rowNo += 1;
+      sectionTitle('TIMER RULES (GREEN • YELLOW • RED)');
+      rules.forEach(r => infoRow(r.label, `Green ${r.g || '–'}   •   Yellow ${r.y || '–'}   •   Red ${r.r || '–'}`));
+      (mt.timerNotes || []).forEach(n => {
+        ws.mergeCells(`A${rowNo}:H${rowNo}`);
+        const c = ws.getCell(`A${rowNo}`); c.value = '• ' + n; c.font = { name: FONT, size: 9, color: { argb: 'FF475569' } }; c.alignment = left;
+        ws.getRow(rowNo).height = 16; rowNo++;
+      });
+      rowNo += 1;
+      ws.mergeCells(`A${rowNo}:H${rowNo}`);
+      const z = ws.getCell(`A${rowNo}`);
+      z.value = { text: `Join on Zoom: ${mt.zoomUrl}`, hyperlink: mt.zoomUrl };
+      z.font = { name: FONT, size: 9, color: { argb: TM.navy }, underline: true }; z.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+      ws.getRow(rowNo).height = 26; rowNo++;
+      ws.mergeCells(`A${rowNo}:H${rowNo}`);
+      const f = ws.getCell(`A${rowNo}`);
+      f.value = `Venue: ${mt.venueAddr}   •   Regular meetings: ${mt.schedule}`;
+      f.font = { name: FONT, size: 9, color: { argb: 'FF64748B' } }; f.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
+      ws.getRow(rowNo).height = 26;
+      ws.pageSetup.printArea = `A1:H${rowNo}`;
+
+      // Second sheet: preparation checklist and attendance (guest names only for organizers)
+      const ps = wb.addWorksheet('Prep & Attendance', { views: [{ showGridLines: false }], pageSetup: { paperSize: 9, orientation: 'portrait', fitToPage: true, fitToWidth: 1, fitToHeight: 0 } });
+      ps.columns = [{ width: 46 }, { width: 30 }, { width: 18 }, { width: 10 }];
+      const head = (r, vals) => { const row = ps.getRow(r); vals.forEach((v, i) => { const c = row.getCell(i + 1); c.value = v; c.font = { name: FONT, size: 10, bold: true, color: { argb: 'FFFFFFFF' } }; c.fill = fill(TM.navy); c.alignment = left; c.border = box; }); row.height = 20; };
+      const line = (r, vals) => { const row = ps.getRow(r); vals.forEach((v, i) => { const c = row.getCell(i + 1); c.value = v; c.font = { name: FONT, size: 10 }; c.alignment = left; c.border = box; }); row.height = 20; };
+      ps.mergeCells('A1:D1'); ps.getCell('A1').value = `Meeting #${mt.no} • Preparation checklist`; ps.getCell('A1').font = { name: HEAD, size: 13, bold: true, color: { argb: TM.maroon } };
+      let pr = 3; head(pr++, ['Task', 'Owner', 'Due', 'Status']);
+      getTasks().forEach(t => { const o = taskOwner(t); line(pr++, [t.task, [o.label, o.name].filter(Boolean).join(' • '), t.due || '', t.done ? 'Done' : 'Pending']); });
+      pr += 1; ps.mergeCells(`A${pr}:D${pr}`); ps.getCell(`A${pr}`).value = 'Attendance'; ps.getCell(`A${pr}`).font = { name: HEAD, size: 13, bold: true, color: { argb: TM.maroon } }; pr += 2;
+      head(pr++, ['Name', 'Role / note', 'Type', 'Joining']);
+      let guests = 0;
+      attendees().forEach(p => {
+        if (p.type === 'guest' && !isAdminMode) { guests++; return; }
+        line(pr++, [p.name, p.auto ? p.roles.join(', ') : (p.note || ''), p.type === 'role' ? 'Role player' : p.type === 'guest' ? 'Guest' : 'Member', p.auto ? '' : (p.mode === 'zoom' ? 'Zoom' : 'Venue')]);
+      });
+      if (guests) line(pr++, [`${guests} guest(s)`, '', 'Guest', '']);
+      return wb;
+    }
+
+    async function downloadAgendaExcel(btn) {
+      const label = btn ? btn.querySelector('span') : null, original = label ? label.innerText : '';
+      try {
+        if (btn) btn.disabled = true; if (label) label.innerText = 'Preparing…';
+        const wb = await buildWorkbook();
+        const buffer = await wb.xlsx.writeBuffer();
+        const mt = getMeeting();
+        downloadBlob(new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), `OneWorld_TMC_Meeting_${mt.no}_Agenda_${fmtDate(mt, 'short').replace(/\s+/g, '')}.xlsx`);
+        showToast('Excel agenda downloaded.');
+      } catch (e) {
+        console.error(e); showToast('Could not create the Excel file. Check your connection and try again.');
+      } finally { if (btn) btn.disabled = false; if (label) label.innerText = original; }
+    }
+
+    // ================= 13. COUNTDOWN, CALENDAR, SHARE, NAV =================
+    function updateCountdown() {
+      const mt = getMeeting(), start = meetingStartMs(mt), end = meetingEndMs(mt), now = Date.now();
+      const ids = ['cdDays', 'cdHours', 'cdMins', 'cdSecs'], heading = document.getElementById('countdownHeading');
+      if (isNaN(start)) return;
+      if (now >= start) { ids.forEach(id => { document.getElementById(id).innerText = '00'; }); heading.innerText = now < end ? 'Meeting is live now!' : 'Thank you for joining!'; return; }
+      heading.innerText = 'Starts in';
+      const d = start - now, parts = [Math.floor(d / 86400000), Math.floor(d % 86400000 / 3600000), Math.floor(d % 3600000 / 60000), Math.floor(d % 60000 / 1000)];
+      ids.forEach((id, i) => { document.getElementById(id).innerText = String(parts[i]).padStart(2, '0'); });
+    }
+    function icsEscape(s) { return String(s || '').replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n'); }
+    function icsDate(ms) { return new Date(ms).toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); }
+    function downloadICS() {
+      const mt = getMeeting();
+      const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//OneWorld Toastmasters//Club Meeting//EN', 'BEGIN:VEVENT',
+        `UID:owtm-meeting-${mt.no}@oneworld-toastmasters`, `DTSTAMP:${icsDate(Date.now())}`,
+        `DTSTART:${icsDate(meetingStartMs(mt))}`, `DTEND:${icsDate(meetingEndMs(mt))}`,
+        `SUMMARY:${icsEscape(`OneWorld Toastmasters Meeting #${mt.no}: ${mt.theme}`)}`,
+        `DESCRIPTION:${icsEscape(`Theme: ${mt.theme}\nWord of the Day: ${mt.wod}\nZoom: ${mt.zoomUrl}\nMeeting ID: ${mt.zoomId}  Passcode: ${mt.zoomPass}`)}`,
+        `LOCATION:${icsEscape(mt.venueAddr)}`, `URL:${icsEscape(mt.zoomUrl)}`, 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
+      downloadBlob(new Blob([ics], { type: 'text/calendar;charset=utf-8' }), `OneWorld_TMC_Meeting_${mt.no}.ics`);
+      showToast('Calendar invite downloaded.');
+    }
+    function copyShareLink() {
+      const url = new URL(window.location.href); url.searchParams.delete('organizer'); url.hash = '';
+      const shareUrl = url.toString(), done = () => showToast('Link copied to clipboard.');
+      const fallback = () => { const t = document.createElement('input'); t.value = shareUrl; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); done(); } catch (e) { showToast(shareUrl); } t.remove(); };
+      if (navigator.share && window.matchMedia('(max-width: 767px)').matches) navigator.share({ title: document.title, url: shareUrl }).catch(() => {});
+      else if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(shareUrl).then(done, fallback);
+      else fallback();
+    }
+    let toastTimer = null;
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      t.classList.remove('translate-y-20', 'opacity-0');
+      clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3500);
+    }
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn'), mobileMenu = document.getElementById('mobileMenu');
+    mobileMenuBtn.addEventListener('click', () => { const hidden = mobileMenu.classList.toggle('hidden'); mobileMenuBtn.setAttribute('aria-expanded', String(!hidden)); });
+    mobileMenu.querySelectorAll('a, button').forEach(el => el.addEventListener('click', () => { mobileMenu.classList.add('hidden'); mobileMenuBtn.setAttribute('aria-expanded', 'false'); }));
+    // Highlight the nav link for the section in view
+    if ('IntersectionObserver' in window) {
+      const links = [...document.querySelectorAll('#desktopNav .nav-link')];
+      const io = new IntersectionObserver(entries => entries.forEach(en => {
+        if (en.isIntersecting) links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + en.target.id));
+      }), { rootMargin: '-40% 0px -55% 0px' });
+      links.forEach(a => { const s = document.querySelector(a.getAttribute('href')); if (s) io.observe(s); });
+    }
+
+    // ================= BOOT =================
+    renderAll();
+    filterAgenda('all');
+    setAgendaView(window.matchMedia('(max-width: 639px)').matches ? 'cards' : 'table');
+    checkOrganizerLink();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+    setInterval(() => { renderAgendaTable(); renderAgendaCards(); }, 30000);
+    loadPublished();
+  </script>
+</body>
+</html>
