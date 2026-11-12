@@ -66,6 +66,8 @@ function setup() {
     appendObj('Meetings', { no: '362', date: '2026-11-12', start: '19:45', end: '21:45', theme: 'Dare to be Different', wod: 'Bold', wodSay: '/BOHLD/',
       wodMeaning: 'Confident and courageous.', format: 'Hybrid', status: 'upcoming' });
   }
+  // Makes Google ask for the "connect to an external service" permission now; sign-in checks need it.
+  UrlFetchApp.fetch('https://oauth2.googleapis.com/tokeninfo', { muteHttpExceptions: true });
   Logger.log('Setup done. Add members in the Members tab (email, name, office, access=member/admin, active=yes).');
 }
 
