@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Members' Portal • OneWorld Toastmasters</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/png" href="assets/tm-logo.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = { theme: { extend: {
+      fontFamily: { heading: ['Montserrat', 'sans-serif'], sans: ['"Source Sans 3"', 'Arial', 'sans-serif'] },
+      colors: { tmMaroon: { DEFAULT: '#772432', dark: '#581722' }, tmNavy: { DEFAULT: '#004165', dark: '#002B44' }, tmGold: { DEFAULT: '#F2DF74', dark: '#C8A944' }, tmGray: { DEFAULT: '#A9B2B1', light: '#F4F6F7' } }
+    } } };
+  </script>
+  <script src="config.js"></script>
+  <style>
+    .eyebrow { font-family: Montserrat, sans-serif; font-weight: 800; font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: #772432; }
+    .tab-btn[aria-selected="true"] { color: #004165; border-color: #772432; }
+    .inp { width: 100%; padding: .6rem .75rem; border: 1px solid #cbd5e1; border-radius: .75rem; background: #fff; }
+    .inp:focus { outline: 2px solid #004165; outline-offset: 0; border-color: transparent; }
+    .lbl { display: block; font-weight: 700; color: #475569; font-size: .75rem; margin-bottom: .25rem; }
+  </style>
+</head>
+<body class="bg-tmGray-light text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-2.5 min-w-0">
+        <img src="assets/tm-logo.png" alt="Toastmasters International logo" width="48" height="40" class="w-11 h-auto flex-shrink-0" />
+        <div class="leading-tight min-w-0">
+          <div class="font-heading font-extrabold text-[13px] sm:text-sm text-tmNavy">ONEWORLD <span class="text-tmMaroon">TOASTMASTERS</span></div>
+          <div class="text-[11px] text-slate-500">Members' Portal</div>
+        </div>
+      </a>
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="hidden sm:inline-flex text-xs font-bold text-slate-600 hover:text-tmMaroon px-2"><i class="fas fa-globe-asia mr-1"></i> Public site</a>
+        <div id="userChip" class="hidden items-center gap-2">
+          <div class="text-right leading-tight hidden sm:block"><div id="userName" class="text-xs font-bold text-slate-900"></div><div id="userOffice" class="text-[10px] text-slate-500"></div></div>
+          <button onclick="signOut()" class="px-3 py-2 rounded-lg border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50"><i class="fas fa-sign-out-alt mr-1"></i>Sign out</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <!-- Setup notice (config.js not filled in yet) -->
+    <section id="setupView" class="hidden max-w-xl mx-auto px-4 py-16">
+      <div class="bg-white rounded-3xl border border-slate-200 p-8 text-center space-y-3">
+        <i class="fas fa-tools text-3xl text-tmMaroon"></i>
+        <h1 class="font-heading font-extrabold text-2xl text-slate-900">Portal not connected yet</h1>
+        <p class="text-sm text-slate-600">The club's Google Sheet backend still needs to be set up. Follow <a href="https://github.com/marulmani/oneworld-tmc-agenda/blob/main/backend/SETUP.md" class="font-bold text-tmNavy underline" target="_blank" rel="noopener noreferrer">backend/SETUP.md</a>, then fill in <code>config.js</code>.</p>
+      </div>
+    </section>
+
+    <!-- Sign in -->
+    <section id="signinView" class="hidden max-w-5xl mx-auto px-4 py-12 sm:py-20 grid md:grid-cols-2 gap-8 items-center">
+      <div class="space-y-4">
+        <div class="eyebrow">Members only</div>
+        <h1 class="font-heading font-extrabold text-3xl sm:text-4xl text-slate-900">Your club, in one place</h1>
+        <ul class="space-y-2.5 text-slate-700">
+          <li><i class="fas fa-user-tag text-tmMaroon w-6"></i> Book meeting roles for the next 8 meetings</li>
+          <li><i class="fas fa-microphone-alt text-tmMaroon w-6"></i> Reserve a speaking slot with your Pathways project</li>
+          <li><i class="fas fa-route text-tmMaroon w-6"></i> Track your Pathways progress</li>
+          <li><i class="fas fa-history text-tmMaroon w-6"></i> See your role history</li>
+        </ul>
+      </div>
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-8 text-center space-y-4">
+        <h2 class="font-heading font-bold text-lg text-slate-900">Sign in</h2>
+        <p class="text-sm text-slate-600">Use the Google account the club Secretary has on the member list.</p>
+        <div id="gsiBtn" class="flex justify-center min-h-[44px]"></div>
+        <p id="signinMsg" class="text-sm text-rose-700 font-semibold"></p>
+        <p class="text-[11px] text-slate-400">Not a member yet? <a href="index.html#visit" class="underline">Visit us as a guest</a>.</p>
+      </div>
+    </section>
+
+    <!-- Loading -->
+    <section id="loadingView" class="max-w-xl mx-auto px-4 py-24 text-center text-slate-500"><i class="fas fa-circle-notch fa-spin text-2xl text-tmNavy"></i><div class="mt-3 text-sm">Loading…</div></section>
+
+    <!-- App -->
+    <section id="appView" class="hidden max-w-6xl mx-auto px-4 sm:px-6 py-8">
+      <div class="mb-6">
+        <div class="eyebrow">Members' Portal</div>
+        <h1 class="font-heading font-extrabold text-2xl sm:text-3xl text-slate-900 mt-1">Hello, <span id="helloName"></span></h1>
+      </div>
+      <nav class="flex gap-1 sm:gap-4 border-b border-slate-300 mb-6 overflow-x-auto text-sm font-heading font-bold text-slate-500" role="tablist">
+        <button class="tab-btn px-2 sm:px-1 py-3 border-b-2 border-transparent whitespace-nowrap" data-tab="home" role="tab"><i class="fas fa-home mr-1"></i>Home</button>
+        <button class="tab-btn px-2 sm:px-1 py-3 border-b-2 border-transparent whitespace-nowrap" data-tab="book" role="tab"><i class="fas fa-user-tag mr-1"></i>Book a Role</button>
+        <button class="tab-btn px-2 sm:px-1 py-3 border-b-2 border-transparent whitespace-nowrap" data-tab="pathways" role="tab"><i class="fas fa-route mr-1"></i>Pathways</button>
+        <button class="tab-btn px-2 sm:px-1 py-3 border-b-2 border-transparent whitespace-nowrap" data-tab="members" role="tab"><i class="fas fa-users mr-1"></i>Members</button>
+        <button id="adminTabBtn" class="tab-btn hidden px-2 sm:px-1 py-3 border-b-2 border-transparent whitespace-nowrap" data-tab="admin" role="tab"><i class="fas fa-cog mr-1"></i>Admin</button>
+      </nav>
+
+      <!-- HOME -->
+      <div id="tab-home" class="tab-panel grid lg:grid-cols-3 gap-5">
+        <div class="lg:col-span-2 space-y-5">
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <div class="flex items-center justify-between mb-3"><h2 class="font-heading font-bold text-slate-900">Your upcoming roles</h2><button onclick="showTab('book')" class="text-xs font-bold text-tmNavy hover:text-tmMaroon">Book more <i class="fas fa-arrow-right"></i></button></div>
+            <ul id="myUpcoming" class="divide-y divide-slate-100"></ul>
+          </div>
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <h2 class="font-heading font-bold text-slate-900">Open roles at the next meeting</h2>
+            <p id="nextMeetingLine" class="text-xs text-slate-500 mb-3"></p>
+            <div id="nextOpenRoles" class="flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+        <div class="space-y-5">
+          <div class="bg-tmNavy text-white rounded-2xl p-5">
+            <div class="text-[10px] font-heading font-bold uppercase tracking-widest text-tmGold">Your Pathways</div>
+            <div id="myPathSummary" class="mt-2"></div>
+            <button onclick="showTab('pathways')" class="mt-4 w-full py-2.5 rounded-xl bg-tmGold text-tmNavy-dark font-heading font-extrabold text-sm hover:bg-tmGold-dark">Update progress</button>
+          </div>
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <h2 class="font-heading font-bold text-slate-900 mb-2">Your role history</h2>
+            <ul id="myHistory" class="text-sm space-y-1.5"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOOK -->
+      <div id="tab-book" class="tab-panel hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+          <div id="meetingChips" class="flex gap-2 overflow-x-auto pb-1"></div>
+          <div class="flex bg-white border border-slate-200 rounded-xl p-1 text-xs font-bold self-start flex-shrink-0">
+            <button id="viewByMeeting" onclick="setBookView('meeting')" class="px-3 py-1.5 rounded-lg">By meeting</button>
+            <button id="viewOverview" onclick="setBookView('overview')" class="px-3 py-1.5 rounded-lg">Overview</button>
+          </div>
+        </div>
+        <div id="bookByMeeting"></div>
+        <div id="bookOverview" class="hidden bg-white rounded-2xl border border-slate-200 overflow-x-auto"></div>
+      </div>
+
+      <!-- PATHWAYS -->
+      <div id="tab-pathways" class="tab-panel hidden grid lg:grid-cols-5 gap-5">
+        <form id="pathForm" onsubmit="savePathway(event)" class="lg:col-span-2 bg-white rounded-2xl border border-slate-200 p-5 space-y-3 self-start">
+          <h2 class="font-heading font-bold text-slate-900" id="pathFormTitle">My Pathways progress</h2>
+          <input type="hidden" id="pwFor" />
+          <div><label class="lbl" for="pwPath">Path</label><select id="pwPath" class="inp"></select></div>
+          <div class="grid grid-cols-2 gap-2">
+            <div><label class="lbl" for="pwLevel">Current level</label><select id="pwLevel" class="inp"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option value="Done">Path complete</option></select></div>
+            <div><label class="lbl" for="pwTarget">Target to finish level</label><input type="month" id="pwTarget" class="inp" /></div>
+          </div>
+          <div><label class="lbl" for="pwCurrent">Next / current project</label><input id="pwCurrent" class="inp" placeholder="e.g. Researching and Presenting" /></div>
+          <div><label class="lbl" for="pwCompleted">Completed projects (one per line)</label><textarea id="pwCompleted" rows="6" class="inp" placeholder="Ice Breaker&#10;Evaluation and Feedback"></textarea></div>
+          <div class="flex gap-2 justify-end">
+            <button type="button" id="pwCancelOther" onclick="editPathway(null)" class="hidden px-4 py-2 rounded-xl bg-slate-100 text-sm font-bold">Back to mine</button>
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-tmNavy text-white text-sm font-bold">Save</button>
+          </div>
+        </form>
+        <div class="lg:col-span-3 bg-white rounded-2xl border border-slate-200 overflow-hidden self-start">
+          <div class="px-5 py-4 border-b border-slate-100"><h2 class="font-heading font-bold text-slate-900">Club progress</h2><p class="text-xs text-slate-500">Everyone's path and level. Speakers' records update when they book a speech.</p></div>
+          <div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-tmGray-light text-[11px] uppercase text-slate-500 font-heading"><tr><th class="text-left px-4 py-2">Member</th><th class="text-left px-3 py-2">Path</th><th class="text-left px-3 py-2 w-32">Level</th><th class="text-left px-3 py-2">Next project</th><th class="px-2"></th></tr></thead><tbody id="clubPathways" class="divide-y divide-slate-100"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- MEMBERS -->
+      <div id="tab-members" class="tab-panel hidden">
+        <p id="memberCount" class="text-sm text-slate-500 mb-4"></p>
+        <div id="memberGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+      </div>
+
+      <!-- ADMIN -->
+      <div id="tab-admin" class="tab-panel hidden grid lg:grid-cols-5 gap-5">
+        <form onsubmit="saveMeeting(event)" class="lg:col-span-3 bg-white rounded-2xl border border-slate-200 p-5 space-y-3 self-start">
+          <div class="flex items-center justify-between"><h2 class="font-heading font-bold text-slate-900" id="mtFormTitle">Add a meeting</h2><button type="button" onclick="editMeeting(null)" class="text-xs font-bold text-tmNavy">Clear form</button></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div><label class="lbl" for="f_no">Meeting #</label><input id="f_no" required class="inp" /></div>
+            <div><label class="lbl" for="f_date">Date</label><input id="f_date" type="date" required class="inp" /></div>
+            <div><label class="lbl" for="f_start">Start</label><input id="f_start" type="time" class="inp" value="19:45" /></div>
+            <div><label class="lbl" for="f_end">End</label><input id="f_end" type="time" class="inp" value="21:45" /></div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div><label class="lbl" for="f_theme">Theme</label><input id="f_theme" class="inp" /></div>
+            <div><label class="lbl" for="f_format">Format</label><input id="f_format" class="inp" value="Hybrid" /></div>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <div><label class="lbl" for="f_wod">Word of the Day</label><input id="f_wod" class="inp" /></div>
+            <div><label class="lbl" for="f_wodSay">Pronunciation</label><input id="f_wodSay" class="inp" /></div>
+            <div><label class="lbl" for="f_wodMeaning">Meaning</label><input id="f_wodMeaning" class="inp" /></div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <div><label class="lbl" for="f_zoomUrl">Zoom link</label><input id="f_zoomUrl" type="url" class="inp" /></div>
+            <div><label class="lbl" for="f_zoomId">Zoom ID</label><input id="f_zoomId" class="inp" /></div>
+            <div><label class="lbl" for="f_zoomPass">Passcode</label><input id="f_zoomPass" class="inp" /></div>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <div><label class="lbl" for="f_status">Status</label><select id="f_status" class="inp"><option value="upcoming">Upcoming</option><option value="done">Done</option><option value="cancelled">Cancelled</option></select></div>
+            <div class="col-span-2"><label class="lbl" for="f_notes">Notes (exco only)</label><input id="f_notes" class="inp" /></div>
+          </div>
+          <div class="flex justify-end"><button type="submit" class="px-5 py-2.5 rounded-xl bg-tmNavy text-white text-sm font-bold">Save meeting</button></div>
+        </form>
+        <div class="lg:col-span-2 space-y-5">
+          <div class="bg-white rounded-2xl border border-slate-200 p-5">
+            <h2 class="font-heading font-bold text-slate-900 mb-3">Meetings</h2>
+            <ul id="adminMeetings" class="divide-y divide-slate-100 text-sm"></ul>
+          </div>
+          <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 text-sm text-amber-950 space-y-2">
+            <div class="font-bold"><i class="fas fa-user-plus mr-1"></i> Adding members</div>
+            <p>Add a row in the <b>Members</b> tab of the club's Google Sheet: email, name, designation, office, access (member/admin), active (yes).</p>
+            <a id="sheetLink" href="#" target="_blank" rel="noopener noreferrer" class="hidden font-bold text-tmNavy underline">Open the Google Sheet</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="text-center text-[11px] text-slate-500 py-6 px-4">
+    The information on this website is for the sole use of Toastmasters' members, for Toastmasters business only. It is not to be used for solicitation and distribution of non-Toastmasters material or information.
+  </footer>
+
+  <!-- Booking modal -->
+  <div id="bookModal" class="modal fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <form onsubmit="submitBooking(event)" class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto space-y-3">
+      <button type="button" onclick="closeModal()" aria-label="Close" class="absolute top-4 right-4 text-slate-400 hover:text-slate-700">✕</button>
+      <h3 id="bookTitle" class="font-heading font-bold text-lg text-slate-900"></h3>
+      <p id="bookSub" class="text-xs text-slate-500 -mt-2"></p>
+      <input type="hidden" id="bkMeeting" /><input type="hidden" id="bkRole" />
+      <div id="bkForWrap" class="hidden"><label class="lbl" for="bkFor">Book for (admin)</label><select id="bkFor" class="inp"></select></div>
+      <div id="bkSpeech" class="hidden space-y-3">
+        <div class="grid grid-cols-3 gap-2">
+          <div class="col-span-2"><label class="lbl" for="bkPath">Path</label><select id="bkPath" class="inp"></select></div>
+          <div><label class="lbl" for="bkLevel">Level</label><select id="bkLevel" class="inp"><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+        </div>
+        <div><label class="lbl" for="bkProject">Project</label><input id="bkProject" class="inp" placeholder="e.g. Ice Breaker" list="projectList" /></div>
+        <div><label class="lbl" for="bkTitle">Speech title (or leave TBA)</label><input id="bkTitle" class="inp" placeholder="TBA" /></div>
+        <div><label class="lbl" for="bkTime">Speech time</label><input id="bkTime" class="inp" list="timeList" placeholder="5–7 min" /></div>
+      </div>
+      <p id="bkError" class="text-sm text-rose-700 font-semibold"></p>
+      <div class="flex justify-end gap-2 pt-1">
+        <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl bg-slate-100 text-sm font-bold">Cancel</button>
+        <button type="submit" id="bkSubmit" class="px-5 py-2 rounded-xl bg-tmMaroon text-white text-sm font-bold">Confirm booking</button>
+      </div>
+    </form>
+  </div>
+  <datalist id="projectList"><option>Ice Breaker</option><option>Evaluation and Feedback</option><option>Researching and Presenting</option><option>Introduction to Vocal Variety and Body Language</option><option>Connect with Storytelling</option><option>Persuasive Speaking</option></datalist>
+  <datalist id="timeList"><option>4–6 min</option><option>5–7 min</option><option>8–10 min</option><option>10–12 min</option><option>18–22 min</option></datalist>
+
+  <div id="toast" class="fixed bottom-6 right-6 left-6 sm:left-auto z-[60] bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl text-sm translate-y-20 opacity-0 pointer-events-none transition-all duration-300"><span id="toastMsg"></span></div>
+
+  <script>
+    const CFG = window.OWTM_CONFIG || {};
+    const PATHS = ['Dynamic Leadership', 'Engaging Humor', 'Motivational Strategies', 'Persuasive Influence', 'Presentation Mastery', 'Visionary Communication',
+      'Effective Coaching', 'Innovative Planning', 'Leadership Development', 'Strategic Relationships', 'Team Collaboration', 'Other'];
+    const GROUP_LABELS = { leaders: 'Meeting Leaders', speakers: 'Prepared Speakers', evaluators: 'Evaluators', functionaries: 'Functionaries' };
+    const ERRORS = {
+      ROLE_TAKEN: 'Someone booked this role a moment ago. The list has been refreshed.',
+      MEETING_CLOSED: 'This meeting is closed for booking.',
+      SPEECH_DETAILS_REQUIRED: 'Please choose your path and project.',
+      NOT_YOUR_BOOKING: 'You can only withdraw from your own roles.',
+      ADMIN_ONLY: 'Only the President, VPE or Secretary can do that.',
+      BUSY_TRY_AGAIN: 'The club sheet is busy. Please try again.',
+      MEETING_NO_AND_DATE_REQUIRED: 'Meeting number and date are required.'
+    };
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const $ = id => document.getElementById(id);
+    const ss = { get(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }, del(k) { try { sessionStorage.removeItem(k); } catch (e) {} } };
+
+    let token = ss.get('owtm_token');
+    let S = null;                 // data from the server
+    let selMeeting = null, bookView = 'meeting';
+
+    // ============ API ============
+    async function api(action, payload) {
+      const res = await fetch(CFG.API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action, token, ...(payload || {}) }) });
+      const d = await res.json();
+      if (!d.ok) {
+        const code = String(d.error || 'ERROR');
+        if (code === 'TOKEN_EXPIRED' || code === 'SIGN_IN_REQUIRED' || code === 'BAD_CLIENT') { token = null; ss.del('owtm_token'); showView('signin'); $('signinMsg').innerText = 'Please sign in again.'; throw new Error('handled'); }
+        if (code.startsWith('NOT_MEMBER:')) { token = null; ss.del('owtm_token'); showView('signin'); $('signinMsg').innerText = `${code.slice(11)} is not on the member list. Ask the club Secretary to add it.`; throw new Error('handled'); }
+        throw new Error(ERRORS[code] || code);
+      }
+      return d;
+    }
+    async function load(action, payload, okMsg) {
+      try {
+        S = await api(action, payload);
+        renderAll();
+        if (okMsg) toast(okMsg);
+        return true;
+      } catch (e) {
+        if (e.message !== 'handled') toast(e.message);
+        if (action !== 'bootstrap' && e.message === ERRORS.ROLE_TAKEN) load('bootstrap');
+        return e.message;
+      }
+    }
+
+    // ============ SIGN-IN ============
+    function showView(v) { ['setup', 'signin', 'loading', 'app'].forEach(x => $(x + 'View').classList.toggle('hidden', x !== v)); $('userChip').classList.toggle('hidden', v !== 'app'); $('userChip').classList.toggle('flex', v === 'app'); }
+    function onCredential(resp) {
+      token = resp.credential; ss.set('owtm_token', token);
+      showView('loading');
+      load('bootstrap').then(ok => { if (ok === true) { showView('app'); editMeeting(null); } });
+    }
+    function initGoogle() {
+      if (!window.google || !google.accounts) return setTimeout(initGoogle, 200);
+      google.accounts.id.initialize({ client_id: CFG.GOOGLE_CLIENT_ID, callback: onCredential, auto_select: true });
+      google.accounts.id.renderButton($('gsiBtn'), { theme: 'filled_blue', size: 'large', shape: 'pill', text: 'signin_with' });
+      if (!token) google.accounts.id.prompt();
+    }
+    function signOut() {
+      token = null; S = null; ss.del('owtm_token');
+      try { google.accounts.id.disableAutoSelect(); } catch (e) {}
+      $('signinMsg').innerText = ''; showView('signin');
+    }
+
+    // ============ HELPERS ============
+    const roleDef = id => (S.roleDefs || []).find(r => r.id === id);
+    const booking = (no, roleId) => S.bookings.find(b => b.meetingNo === no && b.roleId === roleId);
+    const allMeetings = () => [...S.past, ...S.upcoming];
+    const meetingByNo = no => allMeetings().find(m => m.no === no);
+    function fmtDate(d, opts) { const x = new Date(d + 'T12:00:00+08:00'); return isNaN(x) ? d : x.toLocaleDateString('en-GB', { timeZone: 'Asia/Kuala_Lumpur', ...(opts || { weekday: 'short', day: 'numeric', month: 'short' }) }); }
+    const openCount = no => S.roleDefs.filter(r => !booking(no, r.id)).length;
+    const initials = n => String(n || '').replace(/,.*$/, '').trim().split(/\s+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const speechLine = b => [b.speechTitle && b.speechTitle !== 'TBA' ? `“${b.speechTitle}”` : 'Title TBA', b.path, b.level ? 'L' + b.level : '', b.project, b.timeRange].filter(Boolean).join(' • ');
+    let toastT;
+    function toast(m) { $('toastMsg').innerText = m; const t = $('toast'); t.classList.remove('translate-y-20', 'opacity-0'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.add('translate-y-20', 'opacity-0'), 3500); }
+
+    // ============ RENDER ============
+    function renderAll() {
+      const me = S.me;
+      $('userName').innerText = me.name; $('userOffice').innerText = me.office || 'Member';
+      $('helloName').innerText = String(me.name || '').split(' ')[0];
+      $('adminTabBtn').classList.toggle('hidden', !me.isAdmin);
+      if (!selMeeting || !S.upcoming.some(m => m.no === selMeeting)) selMeeting = S.upcoming[0] ? S.upcoming[0].no : null;
+      renderHome(); renderBook(); renderPathways(); renderMembers(); if (me.isAdmin) renderAdmin();
+    }
+
+    function renderHome() {
+      const upNos = S.upcoming.map(m => m.no);
+      const mine = S.bookings.filter(b => b.mine && upNos.includes(b.meetingNo)).sort((a, b) => upNos.indexOf(a.meetingNo) - upNos.indexOf(b.meetingNo));
+      $('myUpcoming').innerHTML = mine.map(b => {
+        const m = meetingByNo(b.meetingNo), r = roleDef(b.roleId);
+        return `<li class="py-3 flex items-center gap-3">
+          <div class="w-14 text-center flex-shrink-0"><div class="text-[10px] uppercase text-slate-500">${esc(fmtDate(m.date, { month: 'short' }))}</div><div class="font-heading font-extrabold text-xl text-tmNavy leading-none">${esc(fmtDate(m.date, { day: 'numeric' }))}</div></div>
+          <div class="min-w-0 flex-1"><div class="font-semibold text-slate-900">${esc(r ? r.title : b.roleId)} <span class="text-xs text-slate-400 font-normal">• #${esc(m.no)}</span></div>${r && r.speech ? `<div class="text-xs text-slate-500 truncate">${esc(speechLine(b))}</div>` : ''}</div>
+          ${r && r.speech ? `<button onclick="openBooking('${esc(b.meetingNo)}','${esc(b.roleId)}')" class="text-xs font-bold text-tmNavy px-2">Edit</button>` : ''}
+          <button onclick="withdraw('${esc(b.meetingNo)}','${esc(b.roleId)}')" class="text-xs font-bold text-rose-700 px-2">Withdraw</button>
+        </li>`;
+      }).join('') || '<li class="py-6 text-center text-sm text-slate-500">No roles booked yet. <button onclick="showTab(\'book\')" class="font-bold text-tmMaroon underline">Book one</button></li>';
+      const next = S.upcoming[0];
+      if (next) {
+        $('nextMeetingLine').innerText = `#${next.no} • ${fmtDate(next.date, { weekday: 'long', day: 'numeric', month: 'long' })}${next.theme ? ' • ' + next.theme : ''}`;
+        const open = S.roleDefs.filter(r => !booking(next.no, r.id));
+        $('nextOpenRoles').innerHTML = open.map(r => `<button onclick="openBooking('${esc(next.no)}','${esc(r.id)}')" class="px-3 py-1.5 rounded-full border border-dashed border-tmMaroon text-tmMaroon text-xs font-bold hover:bg-tmMaroon hover:text-white transition"><i class="fas fa-plus mr-1"></i>${esc(r.title)}</button>`).join('') || '<span class="text-sm text-emerald-700 font-semibold"><i class="fas fa-check-circle mr-1"></i>Every role is filled. Thank you!</span>';
+      } else { $('nextMeetingLine').innerText = 'No upcoming meeting has been added yet.'; $('nextOpenRoles').innerHTML = ''; }
+      const pw = S.pathways.find(p => p.mine);
+      $('myPathSummary').innerHTML = pw && pw.path ? `<div class="font-heading font-bold text-lg">${esc(pw.path)}</div>
+        <div class="text-sm text-slate-300">Level ${esc(pw.level || '—')}${pw.currentProject ? ' • next: ' + esc(pw.currentProject) : ''}</div>
+        ${levelBar(pw.level, 'bg-white/20', 'bg-tmGold')}` : '<div class="text-sm text-slate-300">You have not added your path yet.</div>';
+      const pastNos = S.past.map(m => m.no);
+      const hist = S.bookings.filter(b => b.mine && pastNos.includes(b.meetingNo)).reverse();
+      $('myHistory').innerHTML = hist.map(b => { const m = meetingByNo(b.meetingNo), r = roleDef(b.roleId); return `<li class="flex justify-between gap-2"><span>${esc(r ? r.title : b.roleId)}</span><span class="text-slate-400 text-xs">#${esc(m.no)} • ${esc(fmtDate(m.date, { day: 'numeric', month: 'short' }))}</span></li>`; }).join('') || '<li class="text-slate-500 text-sm">Your past roles will appear here.</li>';
+    }
+    function levelBar(level, track, fill) {
+      const n = level === 'Done' ? 5 : Number(level) || 0;
+      return `<div class="flex gap-1 mt-2" title="Level ${esc(level || 0)} of 5">${[1, 2, 3, 4, 5].map(i => `<span class="h-1.5 flex-1 rounded-full ${i <= n ? fill : track}"></span>`).join('')}</div>`;
+    }
+
+    function renderBook() {
+      $('meetingChips').innerHTML = S.upcoming.map(m => {
+        const on = m.no === selMeeting, open = openCount(m.no);
+        return `<button onclick="selectMeeting('${esc(m.no)}')" class="flex-shrink-0 px-3.5 py-2 rounded-xl border text-left transition ${on ? 'bg-tmNavy border-tmNavy text-white' : 'bg-white border-slate-200 hover:border-tmNavy/40'}">
+          <div class="text-xs font-heading font-bold">#${esc(m.no)} • ${esc(fmtDate(m.date))}</div>
+          <div class="text-[10px] ${on ? 'text-slate-300' : open ? 'text-rose-600' : 'text-emerald-700'} font-semibold">${open ? open + ' open' : 'All filled'}</div>
+        </button>`;
+      }).join('') || '<p class="text-sm text-slate-500">No upcoming meetings yet. The VPE adds them in Admin.</p>';
+      [['viewByMeeting', 'meeting'], ['viewOverview', 'overview']].forEach(([id, v]) => { $(id).className = `px-3 py-1.5 rounded-lg ${bookView === v ? 'bg-tmNavy text-white' : 'text-slate-500'}`; });
+      $('bookByMeeting').classList.toggle('hidden', bookView !== 'meeting');
+      $('bookOverview').classList.toggle('hidden', bookView !== 'overview');
+      const m = meetingByNo(selMeeting);
+      if (m) {
+        const groups = Object.keys(GROUP_LABELS).map(g => {
+          const rows = S.roleDefs.filter(r => r.group === g).map(r => roleRow(m, r)).join('');
+          return `<div class="bg-white rounded-2xl border border-slate-200 overflow-hidden"><div class="px-4 py-2.5 bg-tmGray-light text-[11px] font-heading font-extrabold uppercase tracking-widest text-tmMaroon">${GROUP_LABELS[g]}</div><ul class="divide-y divide-slate-100">${rows}</ul></div>`;
+        }).join('');
+        $('bookByMeeting').innerHTML = `<div class="mb-4 text-sm text-slate-600"><b class="text-slate-900">Meeting #${esc(m.no)}</b> • ${esc(fmtDate(m.date, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }))}${m.theme ? ' • Theme: ' + esc(m.theme) : ''}</div><div class="grid md:grid-cols-2 gap-4">${groups}</div>`;
+      } else $('bookByMeeting').innerHTML = '';
+      // Overview matrix
+      const ms = S.upcoming;
+      $('bookOverview').innerHTML = ms.length ? `<table class="w-full text-xs min-w-[640px]"><thead><tr class="bg-tmNavy text-white font-heading"><th class="text-left px-3 py-2.5 sticky left-0 bg-tmNavy">Role</th>${ms.map(m => `<th class="px-2 py-2.5 text-left whitespace-nowrap">#${esc(m.no)}<div class="font-normal text-[10px] text-slate-300">${esc(fmtDate(m.date, { day: 'numeric', month: 'short' }))}</div></th>`).join('')}</tr></thead>
+        <tbody class="divide-y divide-slate-100">${S.roleDefs.map(r => `<tr><td class="px-3 py-2 font-semibold text-slate-800 whitespace-nowrap sticky left-0 bg-white">${esc(r.title)}</td>${ms.map(m => { const b = booking(m.no, r.id); return `<td class="px-2 py-2 whitespace-nowrap">${b ? `<span class="${b.mine ? 'px-1.5 py-0.5 rounded bg-tmGold text-tmNavy-dark font-bold' : 'text-slate-700'}">${esc(String(b.name).replace(/,.*$/, ''))}</span>` : `<button onclick="openBooking('${esc(m.no)}','${esc(r.id)}')" class="text-rose-600 font-bold hover:underline">Open</button>`}</td>`; }).join('')}</tr>`).join('')}</tbody></table>` : '';
+    }
+    function roleRow(m, r) {
+      const b = booking(m.no, r.id), admin = S.me.isAdmin;
+      let who, actions;
+      if (!b) {
+        who = '<span class="text-rose-600 font-semibold">Open</span>';
+        actions = `<button onclick="openBooking('${esc(m.no)}','${esc(r.id)}')" class="px-3 py-1.5 rounded-lg bg-tmMaroon text-white text-xs font-bold hover:bg-tmMaroon-dark">${admin ? 'Book / assign' : 'Book'}</button>`;
+      } else {
+        who = `<span class="font-semibold text-slate-900">${esc(b.name)}</span>${b.mine ? ' <span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-tmGold text-tmNavy-dark">You</span>' : ''}`;
+        actions = (b.mine || admin) ? `${r.speech || admin ? `<button onclick="openBooking('${esc(m.no)}','${esc(r.id)}')" class="text-xs font-bold text-tmNavy px-2">${admin && !b.mine ? 'Change' : 'Edit'}</button>` : ''}<button onclick="withdraw('${esc(m.no)}','${esc(r.id)}')" class="text-xs font-bold text-rose-700 px-2">${b.mine ? 'Withdraw' : 'Clear'}</button>` : '';
+      }
+      const extra = b && r.speech ? `<div class="text-xs text-slate-500 mt-0.5">${esc(speechLine(b))}</div>` : r.evaluates ? `<div class="text-[11px] text-slate-400">Evaluates ${esc((roleDef(r.evaluates) || {}).title || '')}${booking(m.no, r.evaluates) ? ': ' + esc(booking(m.no, r.evaluates).name.replace(/,.*$/, '')) : ''}</div>` : '';
+      return `<li class="px-4 py-3 flex items-center gap-3"><div class="min-w-0 flex-1"><div class="text-[11px] text-slate-500 font-semibold">${esc(r.title)}</div><div class="text-sm">${who}</div>${extra}</div><div class="flex-shrink-0 flex items-center">${actions}</div></li>`;
+    }
+    function selectMeeting(no) { selMeeting = no; renderBook(); }
+    function setBookView(v) { bookView = v; renderBook(); }
+
+    // ============ BOOKING ============
+    function openBooking(no, roleId) {
+      const m = meetingByNo(no), r = roleDef(roleId), b = booking(no, roleId), admin = S.me.isAdmin;
+      $('bkMeeting').value = no; $('bkRole').value = roleId; $('bkError').innerText = '';
+      $('bookTitle').innerText = `${b ? (b.mine ? 'Edit' : 'Change') : 'Book'}: ${r.title}`;
+      $('bookSub').innerText = `Meeting #${m.no} • ${fmtDate(m.date, { weekday: 'long', day: 'numeric', month: 'long' })}`;
+      $('bkForWrap').classList.toggle('hidden', !admin);
+      if (admin) {
+        $('bkFor').innerHTML = S.members.map(x => `<option value="${esc(x.email)}">${esc(x.name)}${x.isMe ? ' (me)' : ''}</option>`).join('');
+        $('bkFor').value = b && b.email ? b.email : S.me.email;
+      }
+      $('bkSpeech').classList.toggle('hidden', !r.speech);
+      if (r.speech) {
+        const pw = S.pathways.find(p => p.mine) || {};
+        const src = b || { path: pw.path, level: pw.level, project: pw.currentProject };
+        $('bkPath').innerHTML = PATHS.map(p => `<option>${esc(p)}</option>`).join('');
+        if (src.path && !PATHS.includes(src.path)) $('bkPath').insertAdjacentHTML('afterbegin', `<option>${esc(src.path)}</option>`);
+        $('bkPath').value = src.path || PATHS[0];
+        $('bkLevel').value = /^[1-5]$/.test(src.level) ? src.level : '1';
+        $('bkProject').value = src.project || ''; $('bkTitle').value = b && b.speechTitle !== 'TBA' ? (b.speechTitle || '') : ''; $('bkTime').value = (b && b.timeRange) || '5–7 min';
+      }
+      $('bookModal').classList.remove('hidden');
+    }
+    function closeModal() { $('bookModal').classList.add('hidden'); }
+    async function submitBooking(e) {
+      e.preventDefault();
+      const r = roleDef($('bkRole').value);
+      const payload = { meetingNo: $('bkMeeting').value, roleId: r.id };
+      if (S.me.isAdmin) payload.forEmail = $('bkFor').value;
+      if (r.speech) Object.assign(payload, { path: $('bkPath').value, level: $('bkLevel').value, project: $('bkProject').value.trim(), speechTitle: $('bkTitle').value.trim(), timeRange: $('bkTime').value.trim() });
+      if (r.speech && !payload.project) { $('bkError').innerText = 'Please enter your project.'; return; }
+      $('bkSubmit').disabled = true;
+      const ok = await load('book', payload, `Booked: ${r.title}. Thank you!`);
+      $('bkSubmit').disabled = false;
+      if (ok === true) closeModal(); else if (ok !== 'handled') $('bkError').innerText = ok;
+    }
+    async function withdraw(no, roleId) {
+      const r = roleDef(roleId), b = booking(no, roleId);
+      if (!confirm(b && b.mine ? `Withdraw from ${r.title} at meeting #${no}? The role will show as open so someone else can take it.` : `Clear ${b ? b.name : ''} from ${r.title} at meeting #${no}?`)) return;
+      await load('cancel', { meetingNo: no, roleId }, 'Role is open again.');
+    }
+
+    // ============ PATHWAYS ============
+    let pwEditing = null; // email when an admin edits someone else's record
+    function renderPathways() {
+      $('pwPath').innerHTML = '<option value="">— choose —</option>' + PATHS.map(p => `<option>${esc(p)}</option>`).join('');
+      editPathway(pwEditing, true);
+      const rows = [...S.pathways].sort((a, b) => String(a.name).localeCompare(String(b.name)));
+      $('clubPathways').innerHTML = rows.map(p => `<tr class="${p.mine ? 'bg-tmGold/15' : ''}">
+        <td class="px-4 py-2.5 font-semibold text-slate-900">${esc(p.name)}</td>
+        <td class="px-3 py-2.5 text-slate-700">${esc(p.path || '—')}</td>
+        <td class="px-3 py-2.5"><span class="text-xs font-bold text-tmNavy">${p.level === 'Done' ? 'Complete' : 'Level ' + esc(p.level || '—')}</span>${levelBar(p.level, 'bg-slate-200', 'bg-tmMaroon')}</td>
+        <td class="px-3 py-2.5 text-slate-600 text-xs">${esc(p.currentProject || '')}</td>
+        <td class="px-2">${S.me.isAdmin && !p.mine && p.email ? `<button onclick="editPathway('${esc(p.email)}')" class="text-xs font-bold text-tmNavy">Edit</button>` : ''}</td>
+      </tr>`).join('') || '<tr><td colspan="5" class="px-4 py-6 text-center text-slate-500">No one has added their path yet. Be the first!</td></tr>';
+    }
+    function editPathway(email, silent) {
+      pwEditing = email;
+      const p = email ? S.pathways.find(x => x.email === email) : S.pathways.find(x => x.mine);
+      const d = p || {};
+      $('pwFor').value = email || '';
+      $('pathFormTitle').innerText = email ? `Editing: ${d.name || email}` : 'My Pathways progress';
+      $('pwCancelOther').classList.toggle('hidden', !email);
+      if (d.path && !PATHS.includes(d.path)) $('pwPath').insertAdjacentHTML('beforeend', `<option>${esc(d.path)}</option>`);
+      $('pwPath').value = d.path || ''; $('pwLevel').value = d.level || ''; $('pwTarget').value = d.targetDate || '';
+      $('pwCurrent').value = d.currentProject || ''; $('pwCompleted').value = d.completed || '';
+      if (!silent && email) $('pathForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    async function savePathway(e) {
+      e.preventDefault();
+      const payload = { path: $('pwPath').value, level: $('pwLevel').value, targetDate: $('pwTarget').value, currentProject: $('pwCurrent').value.trim(), completed: $('pwCompleted').value.trim() };
+      if ($('pwFor').value) payload.forEmail = $('pwFor').value;
+      const ok = await load('savePathway', payload, 'Pathways progress saved.');
+      if (ok === true && pwEditing) { pwEditing = null; editPathway(null, true); }
+    }
+
+    // ============ MEMBERS ============
+    function renderMembers() {
+      const order = ['President', 'VP Education', 'VP Membership', 'VP Public Relations', 'Secretary', 'Treasurer', 'Sergeant at Arms', 'Immediate Past President'];
+      const rank = m => { const i = order.indexOf(m.office); return i < 0 ? (m.office ? 50 : 99) : i; };
+      const list = [...S.members].sort((a, b) => rank(a) - rank(b) || String(a.name).localeCompare(String(b.name)));
+      $('memberCount').innerText = `${list.length} active members`;
+      $('memberGrid').innerHTML = list.map(m => `<div class="bg-white rounded-2xl border ${m.isMe ? 'border-tmGold' : 'border-slate-200'} p-4 flex items-center gap-3">
+        <span class="w-11 h-11 rounded-full ${m.office ? 'bg-tmMaroon' : 'bg-tmNavy'} text-white flex items-center justify-center font-heading font-extrabold text-sm flex-shrink-0">${esc(initials(m.name))}</span>
+        <div class="min-w-0"><div class="font-semibold text-slate-900 truncate">${esc(m.name)}${m.designation ? ', ' + esc(m.designation) : ''}</div><div class="text-xs ${m.office ? 'text-tmMaroon font-bold' : 'text-slate-500'}">${esc(m.office || 'Member')}</div></div>
+      </div>`).join('');
+    }
+
+    // ============ ADMIN ============
+    const MT_FIELDS = ['no', 'date', 'start', 'end', 'theme', 'format', 'wod', 'wodSay', 'wodMeaning', 'zoomUrl', 'zoomId', 'zoomPass', 'status', 'notes'];
+    function renderAdmin() {
+      $('adminMeetings').innerHTML = [...S.upcoming, ...[...S.past].reverse()].map(m => `<li class="py-2.5 flex items-center gap-2">
+        <div class="min-w-0 flex-1"><div class="font-semibold text-slate-900">#${esc(m.no)} • ${esc(fmtDate(m.date))}</div><div class="text-xs text-slate-500 truncate">${esc(m.theme || 'No theme yet')} • <span class="${m.status === 'done' ? 'text-slate-400' : openCount(m.no) ? 'text-rose-600' : 'text-emerald-700'}">${m.status === 'done' ? 'done' : openCount(m.no) + ' open roles'}</span></div></div>
+        <button onclick="editMeeting('${esc(m.no)}')" class="text-xs font-bold text-tmNavy px-2">Edit</button></li>`).join('') || '<li class="py-4 text-slate-500">No meetings yet.</li>';
+      if (CFG.SHEET_URL) { $('sheetLink').href = CFG.SHEET_URL; $('sheetLink').classList.remove('hidden'); }
+    }
+    function editMeeting(no) {
+      const m = no ? meetingByNo(no) : null;
+      $('mtFormTitle').innerText = m ? `Edit meeting #${m.no}` : 'Add a meeting';
+      if (!m) {
+        // Suggest the next number and a date two weeks after the last meeting
+        const last = S.upcoming[S.upcoming.length - 1] || S.past[S.past.length - 1];
+        const d = last ? new Date(last.date + 'T12:00:00Z') : new Date(); d.setUTCDate(d.getUTCDate() + 14);
+        MT_FIELDS.forEach(k => { $('f_' + k).value = ''; });
+        $('f_no').value = last ? String(Number(last.no) + 1) : ''; $('f_date').value = d.toISOString().slice(0, 10);
+        $('f_start').value = last ? last.start : '19:45'; $('f_end').value = last ? last.end : '21:45'; $('f_format').value = last ? last.format : 'Hybrid';
+        if (last) { $('f_zoomUrl').value = last.zoomUrl || ''; $('f_zoomId').value = last.zoomId || ''; $('f_zoomPass').value = last.zoomPass || ''; }
+        $('f_status').value = 'upcoming';
+      } else MT_FIELDS.forEach(k => { $('f_' + k).value = m[k] || (k === 'status' ? 'upcoming' : ''); });
+    }
+    async function saveMeeting(e) {
+      e.preventDefault();
+      const meeting = {}; MT_FIELDS.forEach(k => { meeting[k] = $('f_' + k).value.trim(); });
+      const ok = await load('saveMeeting', { meeting }, `Meeting #${meeting.no} saved.`);
+      if (ok === true) editMeeting(null);
+    }
+
+    // ============ TABS & BOOT ============
+    function showTab(t) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.setAttribute('aria-selected', String(b.dataset.tab === t)));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('hidden', p.id !== 'tab-' + t));
+      try { history.replaceState(null, '', '#' + t); } catch (e) {}
+    }
+    document.querySelectorAll('.tab-btn').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    (function boot() {
+      showTab((location.hash || '#home').slice(1).replace(/[^a-z]/g, '') || 'home');
+      if (!CFG.API_URL || !CFG.GOOGLE_CLIENT_ID) { showView('setup'); return; }
+      const s = document.createElement('script'); s.src = 'https://accounts.google.com/gsi/client'; s.async = true; s.onload = initGoogle; document.head.appendChild(s);
+      if (token) { showView('loading'); load('bootstrap').then(ok => { if (ok === true) { showView('app'); editMeeting(null); } }); }
+      else showView('signin');
+    })();
+  </script>
+</body>
+</html>

@@ -7,6 +7,7 @@
   <meta name="description" content="OneWorld Toastmasters Club, Kuala Lumpur: next meeting, timed agenda, role players, meeting preparation, executive committee and how to visit as a guest." />
   <link rel="icon" type="image/png" href="assets/tm-logo.png" />
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="config.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <!-- Brand manual free alternates: Montserrat (headings, for Gotham) and Source Sans 3 (body, for Myriad Pro) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -81,11 +82,14 @@
         <a href="#meeting" class="nav-link hover:text-tmMaroon">Next Meeting</a>
         <a href="#agenda" class="nav-link hover:text-tmMaroon">Agenda</a>
         <a href="#lineup" class="nav-link hover:text-tmMaroon">Line-up</a>
-        <a href="#prep" class="nav-link hover:text-tmMaroon">Meeting Prep</a>
+        <a href="#prep" class="nav-link organizer-only hidden hover:text-tmMaroon">Meeting Prep</a>
         <a href="#exco" class="nav-link hover:text-tmMaroon">Exco</a>
         <a href="#visit" class="nav-link hover:text-tmMaroon">Visit Us</a>
       </nav>
       <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+        <a href="members.html" class="px-3 py-2.5 rounded-xl border border-tmNavy/30 text-tmNavy hover:bg-tmNavy hover:text-white font-heading font-bold text-xs sm:text-sm transition flex items-center gap-1.5" title="Members' Portal: book roles and track Pathways">
+          <i class="fas fa-user-lock"></i><span class="hidden sm:inline">Members</span>
+        </a>
         <button id="adminToggleBtn" onclick="toggleAdminMode()" class="hidden items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold border border-amber-400 text-amber-700 bg-amber-50 hover:bg-amber-100" title="Organizer edit mode">
           <i class="fas fa-lock"></i><span id="adminToggleText" class="hidden sm:inline">Organizer</span>
         </button>
@@ -100,10 +104,10 @@
       <a href="#meeting" class="hover:text-tmMaroon">Next Meeting</a>
       <a href="#agenda" class="hover:text-tmMaroon">Agenda</a>
       <a href="#lineup" class="hover:text-tmMaroon">Line-up</a>
-      <a href="#prep" class="hover:text-tmMaroon">Meeting Prep</a>
       <a href="#exco" class="hover:text-tmMaroon">Exco</a>
       <a href="#timer" class="hover:text-tmMaroon">Timer Rules</a>
       <a href="#visit" class="hover:text-tmMaroon">Visit Us</a>
+      <a href="members.html" class="text-tmNavy font-bold"><i class="fas fa-user-lock mr-1"></i>Members' Portal</a>
       <button onclick="copyShareLink()" class="col-span-2 mt-1 text-center border border-slate-300 py-2.5 rounded-lg font-bold text-tmNavy"><i class="fas fa-share-alt mr-1"></i> Share this page</button>
     </div>
   </header>
@@ -247,6 +251,10 @@
         </div>
       </div>
 
+      <div id="upcomingWrap" class="hidden mb-10">
+        <h3 class="font-heading font-bold text-lg text-slate-900 mb-3">Coming up</h3>
+        <div id="upcomingList" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
+      </div>
       <div class="flex items-center justify-between gap-3 mb-4">
         <h3 class="font-heading font-bold text-lg text-slate-900">Links &amp; materials</h3>
         <button id="adminLinkControls" onclick="openLinkModal(null)" class="hidden px-3 py-2 bg-amber-400 text-slate-950 rounded-lg text-xs font-bold"><i class="fas fa-plus mr-1"></i> Add Link</button>
@@ -330,7 +338,7 @@
   </section>
 
   <!-- MEETING PREP -->
-  <section id="prep" class="py-20 sm:py-24">
+  <section id="prep" class="organizer-only hidden py-20 sm:py-24">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-10">
         <div class="lg:col-span-7">
@@ -483,7 +491,7 @@
         </div>
         <div class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs font-semibold">
           <a href="#about" class="hover:text-tmGold">About</a><a href="#meeting" class="hover:text-tmGold">Next Meeting</a><a href="#agenda" class="hover:text-tmGold">Agenda</a>
-          <a href="#prep" class="hover:text-tmGold">Meeting Prep</a><a href="#exco" class="hover:text-tmGold">Exco</a><a href="#visit" class="hover:text-tmGold">Visit Us</a>
+          <a href="#exco" class="hover:text-tmGold">Exco</a><a href="members.html" class="hover:text-tmGold">Members' Portal</a><a href="#visit" class="hover:text-tmGold">Visit Us</a>
           <button onclick="copyShareLink()" class="hover:text-tmGold"><i class="fas fa-share-alt mr-1"></i>Share</button>
         </div>
       </div>
@@ -752,7 +760,7 @@
       { id: 'b1', banner: true, program: 'Introduction' },
       { id: 'a1', from: '7:45 PM', to: '7:50 PM', mins: '5', g: '3', y: '4', r: '5', program: 'SAA Briefing', roleId: 'saa', category: 'general' },
       { id: 'a2', from: '7:51 PM', to: '7:56 PM', mins: '5', g: '3', y: '4', r: '5', program: 'President welcomes members & guests and calls the meeting to order', roleId: 'president', category: 'general' },
-      { id: 'a3', from: '7:57 PM', to: '8:09 PM', mins: '12', g: '10', y: '11', r: '12', program: 'Toastmaster of the Day takes control', details: 'Theme: Dare to be Different', roleId: 'tmod', category: 'general' },
+      { id: 'a3', from: '7:57 PM', to: '8:09 PM', mins: '12', g: '10', y: '11', r: '12', program: 'Toastmaster of the Day takes control', details: 'Introduces the theme and the role players', roleId: 'tmod', category: 'general' },
       { id: 'a4', from: '8:16 PM', to: '8:28 PM', mins: '12', g: '10', y: '11', r: '12', program: 'Table Topics session', details: 'Each speaker: Green 1:00 • Yellow 1:30 • Red 2:00', roleId: 'ttm', category: 'topics' },
       { id: 'a5', from: '8:29 PM', to: '8:30 PM', mins: '1', g: '', y: '', r: '1', program: "Timer's report (Table Topics)", roleId: 'timer', category: 'topics' },
       { id: 'b2', banner: true, program: 'Prepared Speeches' },
@@ -879,11 +887,40 @@
     async function loadPublished() {
       try {
         const res = await fetch('data.json', { cache: 'no-cache' });
-        if (!res.ok) return;
-        const d = await res.json();
-        PUBLISHED = normalise(d);
-        renderAll();
+        if (res.ok) { PUBLISHED = normalise(await res.json()); renderAll(); }
       } catch (e) { /* no data.json yet (or opened from disk): keep built-in defaults */ }
+      await loadLive();
+    }
+
+    // Live line-up from the Members' Portal (Google Sheet). Bookings override the published names.
+    let LIVE_UPCOMING = [];
+    async function loadLive() {
+      const url = (window.OWTM_CONFIG || {}).API_URL;
+      if (!url) return;
+      try {
+        const res = await fetch(url + (url.includes('?') ? '&' : '?') + 'action=public');
+        const d = await res.json();
+        if (!d || !d.ok || !d.meeting) return;
+        Object.keys(d.meeting).forEach(k => { if (d.meeting[k]) PUBLISHED.meeting[k] = d.meeting[k]; });
+        const live = Array.isArray(d.roles) ? d.roles : [];
+        PUBLISHED.roles = PUBLISHED.roles.map(r => {
+          const x = live.find(y => y.id === r.id);
+          return x ? { ...r, name: x.name || '', speech: x.speech || '', project: x.project || '', time: x.time || '' } : r;
+        });
+        live.forEach(x => { if (!PUBLISHED.roles.some(r => r.id === x.id)) PUBLISHED.roles.push({ id: x.id, title: x.title, group: x.group, name: x.name, speech: x.speech, project: x.project, time: x.time }); });
+        LIVE_UPCOMING = Array.isArray(d.upcoming) ? d.upcoming : [];
+        renderAll();
+      } catch (e) { /* portal unreachable: keep published data */ }
+    }
+    function renderUpcoming() {
+      const list = LIVE_UPCOMING.slice(1, 4);
+      document.getElementById('upcomingWrap').classList.toggle('hidden', !list.length);
+      document.getElementById('upcomingList').innerHTML = list.map(m => `<div class="bg-white rounded-xl border border-slate-200 p-4">
+        <div class="text-xs font-bold text-tmMaroon">Meeting #${esc(m.no)}</div>
+        <div class="font-heading font-bold text-slate-900">${esc(fmtDate({ date: m.date }))}</div>
+        <div class="text-sm text-slate-600">${esc(m.theme || 'Theme to be announced')}</div>
+        <a href="members.html#book" class="inline-block mt-2 text-xs font-bold text-tmNavy hover:text-tmMaroon">Members: book a role <i class="fas fa-arrow-right"></i></a>
+      </div>`).join('');
     }
 
     const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -1230,8 +1267,8 @@
     }
     function renderAll() {
       renderMeeting(); renderLinks(); renderAgendaTable(); renderAgendaCards(); renderRoles(); renderTimer();
-      renderTasks(); renderPeople(); renderExco(); renderStats();
-      document.querySelectorAll('.admin-col').forEach(el => el.classList.toggle('hidden', !isAdminMode));
+      renderTasks(); renderPeople(); renderExco(); renderStats(); renderUpcoming();
+      document.querySelectorAll('.admin-col, .organizer-only').forEach(el => el.classList.toggle('hidden', !isAdminMode));
       const ds = document.getElementById('draftState');
       if (ds) ds.innerText = draftCache ? ` (unpublished changes, last edit ${new Date(draftCache.updatedAt || Date.now()).toLocaleString('en-GB', { dateStyle: 'medium', timeStyle: 'short' })})` : ' (no changes yet)';
     }
